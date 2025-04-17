@@ -1,0 +1,231 @@
+2025-04-17 07:31:58,140 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-04-17 07:31:58,141 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: jinaai/jina-embeddings-v2-base-es
+2025-04-17 07:32:08,666 - services.cloudinary_service - INFO - Cloudinary service initialized
+2025-04-17 07:32:09,289 - services.llm_service - INFO - LLM service initialized
+2025-04-17 07:32:12,521 - database.db_utils - INFO - Database initialized successfully. Tables created if they didn't exist.
+2025-04-17 07:32:12,645 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-17 07:32:12,646 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-17 07:32:12,659 - werkzeug - INFO -  * Restarting with stat
+2025-04-17 07:32:22,404 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-04-17 07:32:22,405 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: jinaai/jina-embeddings-v2-base-es
+2025-04-17 07:32:28,998 - services.cloudinary_service - INFO - Cloudinary service initialized
+2025-04-17 07:32:29,220 - services.llm_service - INFO - LLM service initialized
+2025-04-17 07:32:31,746 - database.db_utils - INFO - Database initialized successfully. Tables created if they didn't exist.
+2025-04-17 07:32:31,772 - werkzeug - WARNING -  * Debugger is active!
+2025-04-17 07:32:31,787 - werkzeug - INFO -  * Debugger PIN: 142-139-128
+2025-04-17 07:33:26,413 - werkzeug - INFO - 127.0.0.1 - - [17/Apr/2025 07:33:26] "OPTIONS /retrieve HTTP/1.1" 200 -
+2025-04-17 07:33:26,634 - api.routes - INFO - Received question: Hola
+2025-04-17 07:33:29,329 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 07:33:29,368 - api.routes - INFO - Query routed to: general
+2025-04-17 07:33:32,549 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 07:33:32,555 - werkzeug - INFO - 127.0.0.1 - - [17/Apr/2025 07:33:32] "POST /retrieve HTTP/1.1" 200 -
+2025-04-17 07:34:28,593 - werkzeug - INFO - 127.0.0.1 - - [17/Apr/2025 07:34:28] "OPTIONS /retrieve HTTP/1.1" 200 -
+2025-04-17 07:34:28,857 - api.routes - INFO - Received question: hola
+2025-04-17 07:34:29,415 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 07:34:29,422 - api.routes - INFO - Query routed to: general
+2025-04-17 07:34:29,769 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 07:34:29,775 - werkzeug - INFO - 127.0.0.1 - - [17/Apr/2025 07:34:29] "POST /retrieve HTTP/1.1" 200 -
+2025-04-17 08:09:04,642 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-04-17 08:09:04,643 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: jinaai/jina-embeddings-v2-base-es
+2025-04-17 08:09:11,773 - services.cloudinary_service - INFO - Cloudinary service initialized
+2025-04-17 08:09:11,949 - services.llm_service - INFO - LLM service initialized
+2025-04-17 08:09:15,075 - database.db_utils - INFO - Database initialized successfully. Tables created if they didn't exist.
+2025-04-17 08:09:15,229 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-17 08:09:15,230 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-17 08:09:15,234 - werkzeug - INFO -  * Restarting with stat
+2025-04-17 08:09:26,223 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-04-17 08:09:26,223 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: jinaai/jina-embeddings-v2-base-es
+2025-04-17 08:09:32,428 - services.cloudinary_service - INFO - Cloudinary service initialized
+2025-04-17 08:09:32,648 - services.llm_service - INFO - LLM service initialized
+2025-04-17 08:09:35,244 - database.db_utils - INFO - Database initialized successfully. Tables created if they didn't exist.
+2025-04-17 08:09:35,384 - werkzeug - WARNING -  * Debugger is active!
+2025-04-17 08:09:35,563 - werkzeug - INFO -  * Debugger PIN: 142-139-128
+2025-04-17 08:10:19,191 - api.routes - INFO - Received question: What are the legal consequences of copyright infringement?
+2025-04-17 08:10:20,311 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 08:10:20,336 - api.routes - INFO - Query routed to: casebased
+2025-04-17 08:10:28,719 - database.db_utils - ERROR - Database error: column "created_at" does not exist
+LINE 3:                    to_char(created_at, 'YYYY-MM-DD HH24:MI:S...
+                                   ^
+
+2025-04-17 08:10:28,720 - database.db_utils - ERROR - Error retrieving data for file_id 45922: Database error: column "created_at" does not exist
+LINE 3:                    to_char(created_at, 'YYYY-MM-DD HH24:MI:S...
+                                   ^
+
+2025-04-17 08:10:29,946 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 08:10:29,951 - werkzeug - INFO - 127.0.0.1 - - [17/Apr/2025 08:10:29] "POST /retrieve HTTP/1.1" 200 -
+2025-04-17 08:11:41,629 - api.routes - INFO - Received question: ¿Cuáles son las consecuencias legales de la infracción de derechos de autor?
+2025-04-17 08:11:42,179 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 08:11:42,183 - api.routes - INFO - Query routed to: casebased
+2025-04-17 08:11:46,001 - database.db_utils - ERROR - Database error: column "created_at" does not exist
+LINE 3:                    to_char(created_at, 'YYYY-MM-DD HH24:MI:S...
+                                   ^
+
+2025-04-17 08:11:46,003 - database.db_utils - ERROR - Error retrieving data for file_id 45922: Database error: column "created_at" does not exist
+LINE 3:                    to_char(created_at, 'YYYY-MM-DD HH24:MI:S...
+                                   ^
+
+2025-04-17 08:11:47,268 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 08:11:47,273 - werkzeug - INFO - 127.0.0.1 - - [17/Apr/2025 08:11:47] "POST /retrieve HTTP/1.1" 200 -
+2025-04-17 08:12:30,494 - api.routes - INFO - Received question: hola
+2025-04-17 08:12:31,083 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 08:12:31,087 - api.routes - INFO - Query routed to: general
+2025-04-17 08:12:31,492 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 08:12:31,496 - werkzeug - INFO - 127.0.0.1 - - [17/Apr/2025 08:12:31] "POST /retrieve HTTP/1.1" 200 -
+2025-04-17 08:19:06,687 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-04-17 08:19:06,687 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: jinaai/jina-embeddings-v2-base-es
+2025-04-17 08:19:14,022 - services.cloudinary_service - INFO - Cloudinary service initialized
+2025-04-17 08:19:14,136 - services.llm_service - INFO - LLM service initialized
+2025-04-17 08:19:18,095 - database.db_utils - INFO - Database initialized successfully. Tables created if they didn't exist.
+2025-04-17 08:19:18,237 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-17 08:19:18,238 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-17 08:19:18,243 - werkzeug - INFO -  * Restarting with stat
+2025-04-17 08:19:27,256 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-04-17 08:19:27,257 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: jinaai/jina-embeddings-v2-base-es
+2025-04-17 08:19:34,818 - services.cloudinary_service - INFO - Cloudinary service initialized
+2025-04-17 08:19:34,943 - services.llm_service - INFO - LLM service initialized
+2025-04-17 08:19:37,512 - database.db_utils - INFO - Database initialized successfully. Tables created if they didn't exist.
+2025-04-17 08:19:37,540 - werkzeug - WARNING -  * Debugger is active!
+2025-04-17 08:19:37,550 - werkzeug - INFO -  * Debugger PIN: 142-139-128
+2025-04-17 08:19:44,943 - werkzeug - INFO - 127.0.0.1 - - [17/Apr/2025 08:19:44] "OPTIONS /retrieve HTTP/1.1" 200 -
+2025-04-17 08:19:45,197 - api.routes - INFO - Received question: Hola
+2025-04-17 08:19:45,969 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 08:19:46,013 - api.routes - INFO - Query routed to: general
+2025-04-17 08:19:46,405 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 08:19:46,411 - werkzeug - INFO - 127.0.0.1 - - [17/Apr/2025 08:19:46] "POST /retrieve HTTP/1.1" 200 -
+2025-04-17 08:19:56,214 - werkzeug - INFO - 127.0.0.1 - - [17/Apr/2025 08:19:56] "OPTIONS /retrieve HTTP/1.1" 200 -
+2025-04-17 08:19:56,462 - api.routes - INFO - Received question: ¿Cuáles son las consecuencias legales de la infracción de derechos de autor?
+2025-04-17 08:19:57,225 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 08:19:57,228 - api.routes - INFO - Query routed to: casebased
+2025-04-17 08:20:01,495 - database.db_utils - ERROR - Database error: column "created_at" does not exist
+LINE 3:                    to_char(created_at, 'YYYY-MM-DD HH24:MI:S...
+                                   ^
+
+2025-04-17 08:20:01,496 - database.db_utils - ERROR - Error retrieving data for file_id 45922: Database error: column "created_at" does not exist
+LINE 3:                    to_char(created_at, 'YYYY-MM-DD HH24:MI:S...
+                                   ^
+
+2025-04-17 08:20:02,683 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 08:20:02,688 - werkzeug - INFO - 127.0.0.1 - - [17/Apr/2025 08:20:02] "POST /retrieve HTTP/1.1" 200 -
+2025-04-17 08:21:22,138 - api.routes - INFO - Received question: hola
+2025-04-17 08:21:22,854 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 08:21:22,862 - api.routes - INFO - Query routed to: general
+2025-04-17 08:21:23,336 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 08:21:23,340 - werkzeug - INFO - 127.0.0.1 - - [17/Apr/2025 08:21:23] "POST /retrieve HTTP/1.1" 200 -
+2025-04-17 08:22:48,015 - api.routes - INFO - Received question: ¿Cuáles son las consecuencias legales de la infracción de derechos de autor?
+2025-04-17 08:22:48,567 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 08:22:48,573 - api.routes - INFO - Query routed to: casebased
+2025-04-17 08:22:55,102 - database.db_utils - ERROR - Database error: column "created_at" does not exist
+LINE 3:                    to_char(created_at, 'YYYY-MM-DD HH24:MI:S...
+                                   ^
+
+2025-04-17 08:22:55,103 - database.db_utils - ERROR - Error retrieving data for file_id 45922: Database error: column "created_at" does not exist
+LINE 3:                    to_char(created_at, 'YYYY-MM-DD HH24:MI:S...
+                                   ^
+
+2025-04-17 08:22:56,358 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 08:22:56,363 - werkzeug - INFO - 127.0.0.1 - - [17/Apr/2025 08:22:56] "POST /retrieve HTTP/1.1" 200 -
+2025-04-17 12:54:56,409 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-04-17 12:54:56,411 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: jinaai/jina-embeddings-v2-base-es
+2025-04-17 12:55:04,925 - services.cloudinary_service - INFO - Cloudinary service initialized
+2025-04-17 12:55:05,552 - services.llm_service - INFO - LLM service initialized
+2025-04-17 12:55:08,773 - database.db_utils - INFO - Database initialized successfully. Tables created if they didn't exist.
+2025-04-17 12:55:08,923 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-17 12:55:08,923 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-17 12:55:08,938 - werkzeug - INFO -  * Restarting with stat
+2025-04-17 12:55:16,834 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-04-17 12:55:16,834 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: jinaai/jina-embeddings-v2-base-es
+2025-04-17 12:55:21,150 - services.cloudinary_service - INFO - Cloudinary service initialized
+2025-04-17 12:55:21,235 - services.llm_service - INFO - LLM service initialized
+2025-04-17 12:55:23,756 - database.db_utils - INFO - Database initialized successfully. Tables created if they didn't exist.
+2025-04-17 12:55:23,776 - werkzeug - WARNING -  * Debugger is active!
+2025-04-17 12:55:23,789 - werkzeug - INFO -  * Debugger PIN: 142-139-128
+2025-04-17 12:55:43,032 - api.routes - INFO - Received question: ¿Cuáles son las consecuencias legales de la infracción de derechos de autor?
+2025-04-17 12:55:44,020 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 12:55:44,066 - api.routes - INFO - Query routed to: casebased
+2025-04-17 12:55:48,215 - database.db_utils - ERROR - Database error: column "created_at" does not exist
+LINE 3:                    to_char(created_at, 'YYYY-MM-DD HH24:MI:S...
+                                   ^
+
+2025-04-17 12:55:48,216 - database.db_utils - ERROR - Error retrieving data for file_id 45922: Database error: column "created_at" does not exist
+LINE 3:                    to_char(created_at, 'YYYY-MM-DD HH24:MI:S...
+                                   ^
+
+2025-04-17 12:55:49,704 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 12:55:49,708 - werkzeug - INFO - 127.0.0.1 - - [17/Apr/2025 12:55:49] "POST /retrieve HTTP/1.1" 200 -
+2025-04-17 13:04:14,996 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-04-17 13:04:14,997 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: jinaai/jina-embeddings-v2-base-es
+2025-04-17 13:04:21,249 - services.cloudinary_service - INFO - Cloudinary service initialized
+2025-04-17 13:04:21,388 - services.llm_service - INFO - LLM service initialized
+2025-04-17 13:04:27,732 - database.db_utils - INFO - Database initialized successfully. Tables created if they didn't exist.
+2025-04-17 13:04:27,793 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-17 13:04:27,794 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-17 13:04:27,798 - werkzeug - INFO -  * Restarting with stat
+2025-04-17 13:04:35,680 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-04-17 13:04:35,680 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: jinaai/jina-embeddings-v2-base-es
+2025-04-17 13:04:40,998 - services.cloudinary_service - INFO - Cloudinary service initialized
+2025-04-17 13:04:41,099 - services.llm_service - INFO - LLM service initialized
+2025-04-17 13:04:43,628 - database.db_utils - INFO - Database initialized successfully. Tables created if they didn't exist.
+2025-04-17 13:04:43,645 - werkzeug - WARNING -  * Debugger is active!
+2025-04-17 13:04:43,663 - werkzeug - INFO -  * Debugger PIN: 142-139-128
+2025-04-17 13:05:08,968 - api.routes - INFO - Received question: ¿Cuáles son las consecuencias legales de la infracción de derechos de autor?
+2025-04-17 13:05:09,980 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 13:05:10,001 - api.routes - INFO - Query routed to: casebased
+2025-04-17 13:05:15,383 - database.db_utils - INFO - Retrieved from database - file_id: 45922, file_url: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1744712648/010_2012_224_02_Sentencia_Rev_Directa_CCA_NsinRestab_1_i8btgm.docx, file_summary: This is test summary, case_type: criminal
+2025-04-17 13:05:16,901 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 13:05:16,906 - werkzeug - INFO - 127.0.0.1 - - [17/Apr/2025 13:05:16] "POST /retrieve HTTP/1.1" 200 -
+2025-04-17 13:06:26,299 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-04-17 13:06:26,300 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: jinaai/jina-embeddings-v2-base-es
+2025-04-17 13:06:34,498 - services.cloudinary_service - INFO - Cloudinary service initialized
+2025-04-17 13:06:34,688 - services.llm_service - INFO - LLM service initialized
+2025-04-17 13:06:37,244 - database.db_utils - INFO - Database initialized successfully. Tables created if they didn't exist.
+2025-04-17 13:06:37,282 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-17 13:06:37,283 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-17 13:06:37,290 - werkzeug - INFO -  * Restarting with stat
+2025-04-17 13:06:43,825 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-04-17 13:06:43,826 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: jinaai/jina-embeddings-v2-base-es
+2025-04-17 13:06:51,585 - services.cloudinary_service - INFO - Cloudinary service initialized
+2025-04-17 13:06:51,895 - services.llm_service - INFO - LLM service initialized
+2025-04-17 13:06:54,320 - database.db_utils - INFO - Database initialized successfully. Tables created if they didn't exist.
+2025-04-17 13:06:54,438 - werkzeug - WARNING -  * Debugger is active!
+2025-04-17 13:06:54,461 - werkzeug - INFO -  * Debugger PIN: 142-139-128
+2025-04-17 13:08:13,374 - werkzeug - INFO - 127.0.0.1 - - [17/Apr/2025 13:08:13] "OPTIONS /retrieve HTTP/1.1" 200 -
+2025-04-17 13:08:13,575 - api.routes - INFO - Received question: ¿Cuáles son las consecuencias legales de la infracción de derechos de autor?
+2025-04-17 13:08:14,515 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 13:08:14,548 - api.routes - INFO - Query routed to: casebased
+2025-04-17 13:08:19,538 - database.db_utils - INFO - Retrieved from database - file_id: 45922, file_url: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1744712648/010_2012_224_02_Sentencia_Rev_Directa_CCA_NsinRestab_1_i8btgm.docx, file_summary: This is test summary, case_type: criminal
+2025-04-17 13:08:20,840 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 13:08:20,847 - werkzeug - INFO - 127.0.0.1 - - [17/Apr/2025 13:08:20] "POST /retrieve HTTP/1.1" 200 -
+2025-04-17 13:08:52,402 - werkzeug - INFO - 127.0.0.1 - - [17/Apr/2025 13:08:52] "OPTIONS /retrieve HTTP/1.1" 200 -
+2025-04-17 13:08:52,654 - api.routes - INFO - Received question: hola
+2025-04-17 13:08:53,188 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 13:08:53,191 - api.routes - INFO - Query routed to: general
+2025-04-17 13:08:53,799 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 13:08:53,800 - werkzeug - INFO - 127.0.0.1 - - [17/Apr/2025 13:08:53] "POST /retrieve HTTP/1.1" 200 -
+2025-04-17 18:40:18,131 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-04-17 18:40:18,132 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: jinaai/jina-embeddings-v2-base-es
+2025-04-17 18:40:27,962 - services.cloudinary_service - INFO - Cloudinary service initialized
+2025-04-17 18:40:28,517 - services.llm_service - INFO - LLM service initialized
+2025-04-17 18:40:31,950 - database.db_utils - INFO - Database initialized successfully. Tables created if they didn't exist.
+2025-04-17 18:40:32,804 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-17 18:40:32,807 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-17 18:40:32,843 - werkzeug - INFO -  * Restarting with stat
+2025-04-17 18:40:44,586 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-04-17 18:40:44,588 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: jinaai/jina-embeddings-v2-base-es
+2025-04-17 18:40:52,867 - services.cloudinary_service - INFO - Cloudinary service initialized
+2025-04-17 18:40:53,281 - services.llm_service - INFO - LLM service initialized
+2025-04-17 18:40:55,793 - database.db_utils - INFO - Database initialized successfully. Tables created if they didn't exist.
+2025-04-17 18:40:55,822 - werkzeug - WARNING -  * Debugger is active!
+2025-04-17 18:40:55,841 - werkzeug - INFO -  * Debugger PIN: 142-139-128
+2025-04-17 18:41:19,087 - werkzeug - INFO - 127.0.0.1 - - [17/Apr/2025 18:41:19] "OPTIONS /retrieve HTTP/1.1" 200 -
+2025-04-17 18:41:19,351 - api.routes - INFO - Received question: Hola
+2025-04-17 18:41:20,399 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 18:41:20,557 - api.routes - INFO - Query routed to: general
+2025-04-17 18:41:21,049 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-17 18:41:21,066 - werkzeug - INFO - 127.0.0.1 - - [17/Apr/2025 18:41:21] "POST /retrieve HTTP/1.1" 200 -

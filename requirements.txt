@@ -1,0 +1,15 @@
+flask
+flask-cors
+python-dotenv
+psycopg2-binary
+cloudinary
+groq
+langchain
+langchain-community
+langchain-core
+langchain-groq
+sentence-transformers
+requests
+pydantic
+python-docx
+pypdf

@@ -29,6 +29,7 @@ from services.document_service import process_document
 from services.vector_service import VectorService
 from services.cloudinary_service import CloudinaryService
 from services.llm_service import LLMService
+from services.summary_service import SummarizationService
 
 from database.db_utils import (
     init_database,
@@ -41,6 +42,7 @@ from api.responses import (
     error_response,
     bad_request_response
 )
+
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -68,6 +70,11 @@ def register_routes(app: Flask) -> None:
     )
     
     llm_service = LLMService(
+        groq_api_key=LLM_CONFIG["groq_api_key"],
+        model_name=LLM_CONFIG["model_name"]
+    )
+
+    summarization_service = SummarizationService(
         groq_api_key=LLM_CONFIG["groq_api_key"],
         model_name=LLM_CONFIG["model_name"]
     )
@@ -123,12 +130,13 @@ def register_routes(app: Flask) -> None:
             vector_service.store_document_vectors(chunks, file_id)
             logger.info(f"Stored vectors for file_id {file_id}")
             
+            summary = summarization_service.generate_summary(file_path)
             # Add entry to database
             add_entry(
                 db_url=DB_CONFIG["url"],
                 file_id=file_id,
                 file_url=file_url,
-                file_summary="This is a test summary",  # TODO: Generate real summary
+                file_summary=summary,  # TODO: Generate real summary
                 case_type=case_type
             )
             logger.info(f"Added entry to database with file_id: {file_id}")

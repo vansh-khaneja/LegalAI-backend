@@ -13,3 +13,5 @@ requests
 pydantic
 python-docx
 pypdf
+pypdf2
+openai

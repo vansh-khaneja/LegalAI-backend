@@ -229,3 +229,278 @@ LINE 3:                    to_char(created_at, 'YYYY-MM-DD HH24:MI:S...
 2025-04-17 18:41:20,557 - api.routes - INFO - Query routed to: general
 2025-04-17 18:41:21,049 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
 2025-04-17 18:41:21,066 - werkzeug - INFO - 127.0.0.1 - - [17/Apr/2025 18:41:21] "POST /retrieve HTTP/1.1" 200 -
+2025-04-19 18:59:31,421 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-04-19 18:59:31,422 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: jinaai/jina-embeddings-v2-base-es
+2025-04-19 18:59:40,475 - services.cloudinary_service - INFO - Cloudinary service initialized
+2025-04-19 18:59:40,957 - services.llm_service - INFO - LLM service initialized
+2025-04-19 19:01:43,217 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-04-19 19:01:43,218 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: jinaai/jina-embeddings-v2-base-es
+2025-04-19 19:01:48,505 - services.cloudinary_service - INFO - Cloudinary service initialized
+2025-04-19 19:01:48,638 - services.llm_service - INFO - LLM service initialized
+2025-04-19 19:01:48,645 - services.summary_service - ERROR - Error initializing LLM service: Could not import openai python package. Please install it with `pip install openai`.
+2025-04-19 19:03:47,314 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-04-19 19:03:47,316 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: jinaai/jina-embeddings-v2-base-es
+2025-04-19 19:03:53,463 - services.cloudinary_service - INFO - Cloudinary service initialized
+2025-04-19 19:03:53,596 - services.llm_service - INFO - LLM service initialized
+2025-04-19 19:04:00,071 - services.summary_service - ERROR - Error initializing LLM service: name 'file_path' is not defined
+2025-04-19 19:05:19,702 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-04-19 19:05:19,703 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: jinaai/jina-embeddings-v2-base-es
+2025-04-19 19:05:24,078 - services.cloudinary_service - INFO - Cloudinary service initialized
+2025-04-19 19:05:24,210 - services.llm_service - INFO - LLM service initialized
+2025-04-19 19:05:25,282 - services.summary_service - INFO - Summarizer service initialized
+2025-04-19 19:05:28,331 - database.db_utils - INFO - Database initialized successfully. Tables created if they didn't exist.
+2025-04-19 19:05:28,566 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-19 19:05:28,568 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-19 19:05:28,577 - werkzeug - INFO -  * Restarting with stat
+2025-04-19 19:05:36,553 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-04-19 19:05:36,554 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: jinaai/jina-embeddings-v2-base-es
+2025-04-19 19:05:42,659 - services.cloudinary_service - INFO - Cloudinary service initialized
+2025-04-19 19:05:42,778 - services.llm_service - INFO - LLM service initialized
+2025-04-19 19:05:43,751 - services.summary_service - INFO - Summarizer service initialized
+2025-04-19 19:05:46,335 - database.db_utils - INFO - Database initialized successfully. Tables created if they didn't exist.
+2025-04-19 19:05:46,348 - werkzeug - WARNING -  * Debugger is active!
+2025-04-19 19:05:46,372 - werkzeug - INFO -  * Debugger PIN: 178-699-195
+2025-04-19 19:13:55,488 - api.routes - INFO - Received case type: criminal
+2025-04-19 19:13:55,526 - utils.file_utils - INFO - File saved to uploads\SP489-2023(63783).pdf
+2025-04-19 19:14:04,274 - services.cloudinary_service - INFO - File uploaded to Cloudinary: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1745070243/SP489-2023_63783_twewlu.pdf
+2025-04-19 19:14:04,277 - api.routes - INFO - File uploaded to Cloudinary: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1745070243/SP489-2023_63783_twewlu.pdf
+2025-04-19 19:14:37,344 - services.vector_service - INFO - Stored 22 vectors for file_id 22690 in Qdrant
+2025-04-19 19:14:37,347 - api.routes - INFO - Stored vectors for file_id 22690
+2025-04-19 19:14:39,909 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:14:40,865 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:14:41,055 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-04-19 19:14:41,057 - openai._base_client - INFO - Retrying request to /chat/completions in 32.000000 seconds
+2025-04-19 19:15:14,026 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:15:14,086 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-04-19 19:15:14,087 - openai._base_client - INFO - Retrying request to /chat/completions in 31.000000 seconds
+2025-04-19 19:15:46,099 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:15:46,167 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-04-19 19:15:46,168 - openai._base_client - INFO - Retrying request to /chat/completions in 9.000000 seconds
+2025-04-19 19:15:55,717 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:15:55,730 - services.summary_service - ERROR - Error Summarizing file: Could not import tiktoken python package. This is needed in order to calculate get_token_ids. Please install it with `pip install tiktoken`.
+2025-04-19 19:15:55,730 - api.routes - ERROR - Error in upload_file: Failed to route query: Could not import tiktoken python package. This is needed in order to calculate get_token_ids. Please install it with `pip install tiktoken`.
+2025-04-19 19:15:55,734 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 19:15:55] "[35m[1mPOST /upload HTTP/1.1[0m" 500 -
+2025-04-19 19:16:51,046 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-04-19 19:16:51,047 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: jinaai/jina-embeddings-v2-base-es
+2025-04-19 19:16:57,884 - services.cloudinary_service - INFO - Cloudinary service initialized
+2025-04-19 19:16:58,030 - services.llm_service - INFO - LLM service initialized
+2025-04-19 19:16:59,157 - services.summary_service - INFO - Summarizer service initialized
+2025-04-19 19:17:02,249 - database.db_utils - INFO - Database initialized successfully. Tables created if they didn't exist.
+2025-04-19 19:17:02,278 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-19 19:17:02,279 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-19 19:17:02,281 - werkzeug - INFO -  * Restarting with stat
+2025-04-19 19:17:10,978 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-04-19 19:17:10,978 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: jinaai/jina-embeddings-v2-base-es
+2025-04-19 19:17:17,155 - services.cloudinary_service - INFO - Cloudinary service initialized
+2025-04-19 19:17:17,257 - services.llm_service - INFO - LLM service initialized
+2025-04-19 19:17:18,035 - services.summary_service - INFO - Summarizer service initialized
+2025-04-19 19:17:20,528 - database.db_utils - INFO - Database initialized successfully. Tables created if they didn't exist.
+2025-04-19 19:17:20,551 - werkzeug - WARNING -  * Debugger is active!
+2025-04-19 19:17:20,589 - werkzeug - INFO -  * Debugger PIN: 178-699-195
+2025-04-19 19:18:14,246 - api.routes - INFO - Received case type: criminal
+2025-04-19 19:18:14,251 - utils.file_utils - INFO - File saved to uploads\STP13121-2024.pdf
+2025-04-19 19:18:22,148 - services.cloudinary_service - INFO - File uploaded to Cloudinary: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1745070501/STP13121-2024_to5is5.pdf
+2025-04-19 19:18:22,149 - api.routes - INFO - File uploaded to Cloudinary: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1745070501/STP13121-2024_to5is5.pdf
+2025-04-19 19:19:01,059 - services.vector_service - INFO - Stored 35 vectors for file_id 30881 in Qdrant
+2025-04-19 19:19:01,064 - api.routes - INFO - Stored vectors for file_id 30881
+2025-04-19 19:19:03,729 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:19:04,681 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:19:04,750 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-04-19 19:19:04,751 - openai._base_client - INFO - Retrying request to /chat/completions in 30.000000 seconds
+2025-04-19 19:19:35,944 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:19:36,016 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-04-19 19:19:36,017 - openai._base_client - INFO - Retrying request to /chat/completions in 30.000000 seconds
+2025-04-19 19:20:07,917 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:20:07,976 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-04-19 19:20:07,977 - openai._base_client - INFO - Retrying request to /chat/completions in 31.000000 seconds
+2025-04-19 19:20:39,964 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:20:40,023 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-04-19 19:20:40,024 - openai._base_client - INFO - Retrying request to /chat/completions in 31.000000 seconds
+2025-04-19 19:21:16,065 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:21:16,137 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-04-19 19:21:16,138 - openai._base_client - INFO - Retrying request to /chat/completions in 15.000000 seconds
+2025-04-19 19:21:32,652 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:21:33,229 - langchain_community.chat_models.openai - WARNING - Warning: model not found. Using cl100k_base encoding.
+2025-04-19 19:21:36,386 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-04-19 19:21:36,388 - openai._base_client - INFO - Retrying request to /chat/completions in 21.000000 seconds
+2025-04-19 19:21:58,208 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:22:03,176 - database.db_utils - INFO - New entry added to the legalAi table with file_id: 30881
+2025-04-19 19:22:03,177 - api.routes - INFO - Added entry to database with file_id: 30881
+2025-04-19 19:22:03,179 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 19:22:03] "POST /upload HTTP/1.1" 200 -
+2025-04-19 19:25:51,076 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 19:25:51] "OPTIONS /retrieve HTTP/1.1" 200 -
+2025-04-19 19:25:51,263 - api.routes - INFO - Received question: tell me about the Claudia Patricia Díaz Ñañez  case
+2025-04-19 19:25:52,330 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:25:52,362 - api.routes - INFO - Query routed to: casebased
+2025-04-19 19:25:58,156 - database.db_utils - INFO - Retrieved from database - file_id: 45922, file_url: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1744712648/010_2012_224_02_Sentencia_Rev_Directa_CCA_NsinRestab_1_i8btgm.docx, file_summary: This is test summary, case_type: criminal
+2025-04-19 19:25:59,441 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:25:59,455 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 19:25:59] "POST /retrieve HTTP/1.1" 200 -
+2025-04-19 19:26:58,056 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 19:26:58] "OPTIONS /retrieve HTTP/1.1" 200 -
+2025-04-19 19:26:58,320 - api.routes - INFO - Received question: hola
+2025-04-19 19:26:59,303 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:26:59,305 - api.routes - INFO - Query routed to: general
+2025-04-19 19:26:59,964 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:26:59,970 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 19:26:59] "POST /retrieve HTTP/1.1" 200 -
+2025-04-19 19:27:59,723 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 19:27:59] "OPTIONS /retrieve HTTP/1.1" 200 -
+2025-04-19 19:27:59,987 - api.routes - INFO - Received question: hola
+2025-04-19 19:28:02,934 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:28:02,938 - api.routes - INFO - Query routed to: general
+2025-04-19 19:28:03,777 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:28:03,782 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 19:28:03] "POST /retrieve HTTP/1.1" 200 -
+2025-04-19 19:29:59,128 - api.routes - INFO - Received question: ¿Cuáles son las consecuencias legales de la infracción de derechos de autor?
+2025-04-19 19:30:00,011 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:30:00,031 - api.routes - INFO - Query routed to: casebased
+2025-04-19 19:30:05,519 - database.db_utils - INFO - Retrieved from database - file_id: 45922, file_url: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1744712648/010_2012_224_02_Sentencia_Rev_Directa_CCA_NsinRestab_1_i8btgm.docx, file_summary: This is test summary, case_type: criminal
+2025-04-19 19:30:08,017 - database.db_utils - INFO - Retrieved from database - file_id: 39553, file_url: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1745026148/SP489-2023_63783_xjthqy.pdf, file_summary: This is a test summary, case_type: criminal
+2025-04-19 19:30:10,088 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:30:10,105 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 19:30:10] "POST /retrieve HTTP/1.1" 200 -
+2025-04-19 19:35:34,814 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 19:35:34] "OPTIONS /retrieve HTTP/1.1" 200 -
+2025-04-19 19:35:34,924 - api.routes - INFO - Received question: hola
+2025-04-19 19:35:36,134 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:35:36,170 - api.routes - INFO - Query routed to: general
+2025-04-19 19:35:36,736 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:35:36,747 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 19:35:36] "POST /retrieve HTTP/1.1" 200 -
+2025-04-19 19:37:15,421 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 19:37:15] "OPTIONS /retrieve HTTP/1.1" 200 -
+2025-04-19 19:37:15,623 - api.routes - INFO - Received question: hola
+2025-04-19 19:37:18,226 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:37:18,272 - api.routes - INFO - Query routed to: general
+2025-04-19 19:37:19,644 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:37:19,657 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 19:37:19] "POST /retrieve HTTP/1.1" 200 -
+2025-04-19 19:38:18,815 - api.routes - INFO - Received question: hola
+2025-04-19 19:38:19,349 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:38:19,355 - api.routes - INFO - Query routed to: general
+2025-04-19 19:38:19,729 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:38:19,731 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 19:38:19] "POST /retrieve HTTP/1.1" 200 -
+2025-04-19 19:42:54,463 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 19:42:54] "OPTIONS /retrieve HTTP/1.1" 200 -
+2025-04-19 19:42:54,574 - api.routes - INFO - Received question: hola
+2025-04-19 19:42:55,190 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:42:55,203 - api.routes - INFO - Query routed to: general
+2025-04-19 19:42:55,591 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:42:55,594 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 19:42:55] "POST /retrieve HTTP/1.1" 200 -
+2025-04-19 19:44:03,407 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 19:44:03] "OPTIONS /retrieve HTTP/1.1" 200 -
+2025-04-19 19:44:03,673 - api.routes - INFO - Received question: Hábleme de Claudia Patricia Díaz Ñañez, cuyo expareja Jacob Miguel Calvache Pabón fue supuestamente asesinado por el grupo disidente de las FARC "Bloque Jaime"
+2025-04-19 19:44:04,247 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:44:04,251 - api.routes - INFO - Query routed to: casebased
+2025-04-19 19:44:11,273 - database.db_utils - INFO - Retrieved from database - file_id: 45922, file_url: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1744712648/010_2012_224_02_Sentencia_Rev_Directa_CCA_NsinRestab_1_i8btgm.docx, file_summary: This is test summary, case_type: criminal
+2025-04-19 19:44:13,510 - database.db_utils - INFO - Retrieved from database - file_id: 30881, file_url: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1745070501/STP13121-2024_to5is5.pdf, file_summary: Here is a concise summary of the case:
+
+The Colombian Supreme Court ruled in favor of Claudia Patricia Díaz Ñañez, whose ex-partner Jacob Miguel Calvache Pabón was allegedly murdered by FARC dissident group "Bloque Jaime" in 2020. The court ordered the authorities to:
+
+* Conduct a thorough investigation into the crime
+* Provide protection to the victim's family, including psychological support to their minor daughter
+* Legally recognize the victim's death and provide compensation and benefits to his family
+* Ensure the safety and security of the investigation, including the exhumation of the body
+
+The court also rejected the request for the accionante (Claudia Patricia Díaz Ñañez) to be present during the exhumation, prioritizing the safety and security of the investigation., case_type: criminal
+2025-04-19 19:44:15,781 - database.db_utils - INFO - Retrieved from database - file_id: 39553, file_url: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1745026148/SP489-2023_63783_xjthqy.pdf, file_summary: This is a test summary, case_type: criminal
+2025-04-19 19:44:17,054 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:44:17,064 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 19:44:17] "POST /retrieve HTTP/1.1" 200 -
+2025-04-19 19:49:58,460 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 19:49:58] "OPTIONS /retrieve HTTP/1.1" 200 -
+2025-04-19 19:49:58,627 - api.routes - INFO - Received question: Hábleme de Claudia Patricia Díaz Ñañez, cuyo expareja Jacob Miguel Calvache Pabón fue supuestamente asesinado por el grupo disidente de las FARC "Bloque Jaime"
+2025-04-19 19:49:59,577 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:49:59,595 - api.routes - INFO - Query routed to: casebased
+2025-04-19 19:50:04,887 - database.db_utils - INFO - Retrieved from database - file_id: 45922, file_url: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1744712648/010_2012_224_02_Sentencia_Rev_Directa_CCA_NsinRestab_1_i8btgm.docx, file_summary: This is test summary, case_type: criminal
+2025-04-19 19:50:07,162 - database.db_utils - INFO - Retrieved from database - file_id: 30881, file_url: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1745070501/STP13121-2024_to5is5.pdf, file_summary: Here is a concise summary of the case:
+
+The Colombian Supreme Court ruled in favor of Claudia Patricia Díaz Ñañez, whose ex-partner Jacob Miguel Calvache Pabón was allegedly murdered by FARC dissident group "Bloque Jaime" in 2020. The court ordered the authorities to:
+
+* Conduct a thorough investigation into the crime
+* Provide protection to the victim's family, including psychological support to their minor daughter
+* Legally recognize the victim's death and provide compensation and benefits to his family
+* Ensure the safety and security of the investigation, including the exhumation of the body
+
+The court also rejected the request for the accionante (Claudia Patricia Díaz Ñañez) to be present during the exhumation, prioritizing the safety and security of the investigation., case_type: criminal
+2025-04-19 19:50:09,526 - database.db_utils - INFO - Retrieved from database - file_id: 39553, file_url: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1745026148/SP489-2023_63783_xjthqy.pdf, file_summary: This is a test summary, case_type: criminal
+2025-04-19 19:50:10,838 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:50:10,853 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 19:50:10] "POST /retrieve HTTP/1.1" 200 -
+2025-04-19 19:58:46,674 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 19:58:46] "OPTIONS /retrieve HTTP/1.1" 200 -
+2025-04-19 19:58:46,817 - api.routes - INFO - Received question: hola
+2025-04-19 19:58:47,530 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:58:47,548 - api.routes - INFO - Query routed to: general
+2025-04-19 19:58:48,133 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:58:48,136 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 19:58:48] "POST /retrieve HTTP/1.1" 200 -
+2025-04-19 19:58:58,398 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 19:58:58] "OPTIONS /retrieve HTTP/1.1" 200 -
+2025-04-19 19:58:58,707 - api.routes - INFO - Received question: Hábleme de Claudia Patricia Díaz Ñañez, cuyo expareja Jacob Miguel Calvache Pabón fue supuestamente asesinado por el grupo disidente de las FARC "Bloque Jaime"
+2025-04-19 19:58:59,234 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:58:59,237 - api.routes - INFO - Query routed to: casebased
+2025-04-19 19:59:06,083 - database.db_utils - INFO - Retrieved from database - file_id: 45922, file_url: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1744712648/010_2012_224_02_Sentencia_Rev_Directa_CCA_NsinRestab_1_i8btgm.docx, file_summary: This is test summary, case_type: criminal
+2025-04-19 19:59:08,508 - database.db_utils - INFO - Retrieved from database - file_id: 30881, file_url: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1745070501/STP13121-2024_to5is5.pdf, file_summary: Here is a concise summary of the case:
+
+The Colombian Supreme Court ruled in favor of Claudia Patricia Díaz Ñañez, whose ex-partner Jacob Miguel Calvache Pabón was allegedly murdered by FARC dissident group "Bloque Jaime" in 2020. The court ordered the authorities to:
+
+* Conduct a thorough investigation into the crime
+* Provide protection to the victim's family, including psychological support to their minor daughter
+* Legally recognize the victim's death and provide compensation and benefits to his family
+* Ensure the safety and security of the investigation, including the exhumation of the body
+
+The court also rejected the request for the accionante (Claudia Patricia Díaz Ñañez) to be present during the exhumation, prioritizing the safety and security of the investigation., case_type: criminal
+2025-04-19 19:59:10,801 - database.db_utils - INFO - Retrieved from database - file_id: 39553, file_url: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1745026148/SP489-2023_63783_xjthqy.pdf, file_summary: This is a test summary, case_type: criminal
+2025-04-19 19:59:12,575 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 19:59:12,579 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 19:59:12] "POST /retrieve HTTP/1.1" 200 -
+2025-04-19 20:05:11,784 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 20:05:11] "OPTIONS /retrieve HTTP/1.1" 200 -
+2025-04-19 20:05:11,984 - api.routes - INFO - Received question: Hábleme de Claudia Patricia Díaz Ñañez, cuyo expareja Jacob Miguel Calvache Pabón fue supuestamente asesinado por el grupo disidente de las FARC "Bloque Jaime"
+2025-04-19 20:05:12,827 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 20:05:12,836 - api.routes - INFO - Query routed to: casebased
+2025-04-19 20:05:18,016 - database.db_utils - INFO - Retrieved from database - file_id: 45922, file_url: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1744712648/010_2012_224_02_Sentencia_Rev_Directa_CCA_NsinRestab_1_i8btgm.docx, file_summary: This is test summary, case_type: criminal
+2025-04-19 20:05:20,391 - database.db_utils - INFO - Retrieved from database - file_id: 30881, file_url: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1745070501/STP13121-2024_to5is5.pdf, file_summary: Here is a concise summary of the case:
+
+The Colombian Supreme Court ruled in favor of Claudia Patricia Díaz Ñañez, whose ex-partner Jacob Miguel Calvache Pabón was allegedly murdered by FARC dissident group "Bloque Jaime" in 2020. The court ordered the authorities to:
+
+* Conduct a thorough investigation into the crime
+* Provide protection to the victim's family, including psychological support to their minor daughter
+* Legally recognize the victim's death and provide compensation and benefits to his family
+* Ensure the safety and security of the investigation, including the exhumation of the body
+
+The court also rejected the request for the accionante (Claudia Patricia Díaz Ñañez) to be present during the exhumation, prioritizing the safety and security of the investigation., case_type: criminal
+2025-04-19 20:05:22,689 - database.db_utils - INFO - Retrieved from database - file_id: 39553, file_url: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1745026148/SP489-2023_63783_xjthqy.pdf, file_summary: This is a test summary, case_type: criminal
+2025-04-19 20:05:24,229 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 20:05:24,237 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 20:05:24] "POST /retrieve HTTP/1.1" 200 -
+2025-04-19 20:05:44,188 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 20:05:44] "OPTIONS /retrieve HTTP/1.1" 200 -
+2025-04-19 20:05:44,452 - api.routes - INFO - Received question: Hábleme de Claudia Patricia Díaz Ñañez, cuyo expareja Jacob Miguel Calvache Pabón fue supuestamente asesinado por el grupo disidente de las FARC "Bloque Jaime"
+2025-04-19 20:05:45,015 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 20:05:45,022 - api.routes - INFO - Query routed to: casebased
+2025-04-19 20:05:48,656 - database.db_utils - INFO - Retrieved from database - file_id: 45922, file_url: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1744712648/010_2012_224_02_Sentencia_Rev_Directa_CCA_NsinRestab_1_i8btgm.docx, file_summary: This is test summary, case_type: criminal
+2025-04-19 20:05:50,963 - database.db_utils - INFO - Retrieved from database - file_id: 30881, file_url: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1745070501/STP13121-2024_to5is5.pdf, file_summary: Here is a concise summary of the case:
+
+The Colombian Supreme Court ruled in favor of Claudia Patricia Díaz Ñañez, whose ex-partner Jacob Miguel Calvache Pabón was allegedly murdered by FARC dissident group "Bloque Jaime" in 2020. The court ordered the authorities to:
+
+* Conduct a thorough investigation into the crime
+* Provide protection to the victim's family, including psychological support to their minor daughter
+* Legally recognize the victim's death and provide compensation and benefits to his family
+* Ensure the safety and security of the investigation, including the exhumation of the body
+
+The court also rejected the request for the accionante (Claudia Patricia Díaz Ñañez) to be present during the exhumation, prioritizing the safety and security of the investigation., case_type: criminal
+2025-04-19 20:05:53,278 - database.db_utils - INFO - Retrieved from database - file_id: 39553, file_url: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1745026148/SP489-2023_63783_xjthqy.pdf, file_summary: This is a test summary, case_type: criminal
+2025-04-19 20:05:55,267 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 20:05:55,272 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 20:05:55] "POST /retrieve HTTP/1.1" 200 -
+2025-04-19 20:10:57,932 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 20:10:57] "OPTIONS /retrieve HTTP/1.1" 200 -
+2025-04-19 20:10:58,147 - api.routes - INFO - Received question: Hábleme de Claudia Patricia Díaz Ñañez, cuyo expareja Jacob Miguel Calvache Pabón fue supuestamente asesinado por el grupo disidente de las FARC "Bloque Jaime"
+2025-04-19 20:10:58,774 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 20:10:58,789 - api.routes - INFO - Query routed to: casebased
+2025-04-19 20:11:04,888 - database.db_utils - INFO - Retrieved from database - file_id: 45922, file_url: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1744712648/010_2012_224_02_Sentencia_Rev_Directa_CCA_NsinRestab_1_i8btgm.docx, file_summary: This is test summary, case_type: criminal
+2025-04-19 20:11:07,174 - database.db_utils - INFO - Retrieved from database - file_id: 30881, file_url: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1745070501/STP13121-2024_to5is5.pdf, file_summary: Here is a concise summary of the case:
+
+The Colombian Supreme Court ruled in favor of Claudia Patricia Díaz Ñañez, whose ex-partner Jacob Miguel Calvache Pabón was allegedly murdered by FARC dissident group "Bloque Jaime" in 2020. The court ordered the authorities to:
+
+* Conduct a thorough investigation into the crime
+* Provide protection to the victim's family, including psychological support to their minor daughter
+* Legally recognize the victim's death and provide compensation and benefits to his family
+* Ensure the safety and security of the investigation, including the exhumation of the body
+
+The court also rejected the request for the accionante (Claudia Patricia Díaz Ñañez) to be present during the exhumation, prioritizing the safety and security of the investigation., case_type: criminal
+2025-04-19 20:11:09,528 - database.db_utils - INFO - Retrieved from database - file_id: 39553, file_url: https://res.cloudinary.com/dnkrqpuqk/raw/upload/v1745026148/SP489-2023_63783_xjthqy.pdf, file_summary: This is a test summary, case_type: criminal
+2025-04-19 20:11:10,932 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 20:11:10,941 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 20:11:10] "POST /retrieve HTTP/1.1" 200 -
+2025-04-19 20:21:00,289 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 20:21:00] "OPTIONS /retrieve HTTP/1.1" 200 -
+2025-04-19 20:21:00,473 - api.routes - INFO - Received question: ¿En qué puedo ayudar?
+2025-04-19 20:21:01,305 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 20:21:01,319 - api.routes - INFO - Query routed to: general
+2025-04-19 20:21:01,950 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 20:21:01,957 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 20:21:01] "POST /retrieve HTTP/1.1" 200 -
+2025-04-19 20:21:25,559 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 20:21:25] "OPTIONS /retrieve HTTP/1.1" 200 -
+2025-04-19 20:21:25,816 - api.routes - INFO - Received question: hi
+2025-04-19 20:21:26,385 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 20:21:26,388 - api.routes - INFO - Query routed to: general
+2025-04-19 20:21:26,777 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-19 20:21:26,784 - werkzeug - INFO - 127.0.0.1 - - [19/Apr/2025 20:21:26] "POST /retrieve HTTP/1.1" 200 -

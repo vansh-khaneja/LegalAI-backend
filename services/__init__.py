@@ -28,6 +28,11 @@ from services.llm_service import (
     RouteQuery
 )
 
+from services.summary_service import (
+    SummarizationService,
+    SummarizationError
+)   
+
 __all__ = [
     'load_document',
     'split_text',
@@ -39,5 +44,7 @@ __all__ = [
     'CloudinaryError',
     'LLMService',
     'LLMServiceError',
-    'RouteQuery'
+    'RouteQuery',
+    'SummarizationService',
+    'SummarizationError'
 ]

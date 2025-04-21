@@ -34,7 +34,7 @@ class RouteQuery(BaseModel):
 class LLMService:
     """Service for handling language model operations."""
     
-    def __init__(self, groq_api_key: str, model_name: str = "llama3-8b-8192"):
+    def __init__(self, groq_api_key: str, model_name: str = "meta-llama/llama-4-scout-17b-16e-instruct"):
         """
         Initialize the LLM service.
         

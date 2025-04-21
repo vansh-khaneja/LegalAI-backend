@@ -6,9 +6,9 @@ file storage, and language model interactions.
 """
 
 from services.document_service import (
-    load_document,
+    load_document_from_stream,
     split_text,
-    process_document,
+    process_document_from_stream,
     DocumentProcessingError
 )
 
@@ -34,9 +34,9 @@ from services.summary_service import (
 )   
 
 __all__ = [
-    'load_document',
+    'load_document_from_stream',
     'split_text',
-    'process_document',
+    'process_document_from_stream',
     'DocumentProcessingError',
     'VectorService',
     'VectorServiceError',

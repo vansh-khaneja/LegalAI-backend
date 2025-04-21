@@ -8,6 +8,7 @@ import os
 import random
 import json
 import logging
+import io
 from typing import Dict, Any, List, Optional
 
 from flask import Flask, request, jsonify, Response
@@ -16,16 +17,15 @@ from config import (
     DB_CONFIG, 
     VECTOR_CONFIG, 
     CLOUDINARY_CONFIG, 
-    LLM_CONFIG,
-    UPLOAD_FOLDER
+    LLM_CONFIG
 )
 
 from utils.file_utils import (
-    save_uploaded_file,
+    get_file_stream,
     validate_file_type
 )
 
-from services.document_service import process_document
+from services.document_service import process_document_from_stream
 from services.vector_service import VectorService
 from services.cloudinary_service import CloudinaryService
 from services.llm_service import LLMService
@@ -108,17 +108,13 @@ def register_routes(app: Flask) -> None:
             if not validate_file_type(file.filename, [".pdf", ".docx"]):
                 return bad_request_response("Unsupported file type. Only PDF and DOCX are allowed.")
             
-            # Save uploaded file
-            file_path = save_uploaded_file(file, UPLOAD_FOLDER)
+            # Get file stream instead of saving to disk
+            file_stream, original_filename = get_file_stream(file)
             
-            # Upload to Cloudinary
-            response = cloudinary_service.upload_file(file_path)
-            file_url = response['secure_url']
-            logger.info(f"File uploaded to Cloudinary: {file_url}")
-            
-            # Process document
-            chunks = process_document(
-                file_path, 
+            # Process document directly from stream
+            chunks = process_document_from_stream(
+                file_stream=file_stream,
+                file_name=original_filename,
                 chunk_size=VECTOR_CONFIG["chunk_size"],
                 chunk_overlap=VECTOR_CONFIG["chunk_overlap"]
             )
@@ -130,16 +126,38 @@ def register_routes(app: Flask) -> None:
             vector_service.store_document_vectors(chunks, file_id)
             logger.info(f"Stored vectors for file_id {file_id}")
             
-            summary = summarization_service.generate_summary(file_path)
+            # Reset stream position for summarization
+            file_stream.seek(0)
+            
+            # Generate summary directly from stream
+            summary = summarization_service.generate_summary_from_stream(
+                file_stream=file_stream,
+                file_name=original_filename
+            )
+            
+            # Reset stream position for Cloudinary upload
+            file_stream.seek(0)
+            
+            # Upload to Cloudinary directly from stream
+            response = cloudinary_service.upload_file_stream(
+                file_stream=file_stream,
+                filename=original_filename
+            )
+            file_url = response['secure_url']
+            logger.info(f"File uploaded to Cloudinary: {file_url}")
+            
             # Add entry to database
             add_entry(
                 db_url=DB_CONFIG["url"],
                 file_id=file_id,
                 file_url=file_url,
-                file_summary=summary,  # TODO: Generate real summary
+                file_summary=summary,
                 case_type=case_type
             )
             logger.info(f"Added entry to database with file_id: {file_id}")
+            
+            # Close the file stream
+            file_stream.close()
             
             return success_response(
                 message=f"File processed and uploaded as {case_type} case",

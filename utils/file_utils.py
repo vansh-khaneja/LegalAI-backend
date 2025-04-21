@@ -6,7 +6,8 @@ This module provides utility functions for file handling operations.
 
 import os
 import logging
-from typing import Tuple, List, Optional
+import io
+from typing import Tuple, List, Optional, BinaryIO, Union
 from werkzeug.datastructures import FileStorage
 
 # Configure logging
@@ -31,36 +32,38 @@ def get_file_extension(filename: str) -> str:
     return os.path.splitext(filename)[1].lower()
 
 
-def save_uploaded_file(file: FileStorage, upload_folder: str) -> str:
+def get_file_stream(file: FileStorage) -> Tuple[BinaryIO, str]:
     """
-    Save an uploaded file to the specified folder.
+    Get a file stream from an uploaded file without saving it locally.
     
     Args:
         file: Uploaded file object
-        upload_folder: Folder to save the file in
         
     Returns:
-        Path to the saved file
+        Tuple of (file stream, filename)
         
     Raises:
-        FileUtilsError: If file saving fails
+        FileUtilsError: If file processing fails
     """
     try:
-        # Ensure upload folder exists
-        os.makedirs(upload_folder, exist_ok=True)
+        # Read the file data into memory
+        file_data = file.read()
         
-        # Generate file path
-        file_path = os.path.join(upload_folder, file.filename)
+        # Create a BytesIO object from the file data
+        file_stream = io.BytesIO(file_data)
         
-        # Save the file
-        file.save(file_path)
+        # Get the original filename
+        original_filename = file.filename
         
-        logger.info(f"File saved to {file_path}")
-        return file_path
+        # Reset the file stream position to the beginning
+        file_stream.seek(0)
+        
+        logger.info(f"File '{original_filename}' loaded into memory")
+        return file_stream, original_filename
         
     except Exception as e:
-        logger.error(f"Error saving uploaded file: {e}")
-        raise FileUtilsError(f"Failed to save uploaded file: {e}")
+        logger.error(f"Error processing uploaded file: {e}")
+        raise FileUtilsError(f"Failed to process uploaded file: {e}")
 
 
 def validate_file_type(filename: str, allowed_extensions: List[str]) -> bool:
@@ -76,26 +79,3 @@ def validate_file_type(filename: str, allowed_extensions: List[str]) -> bool:
     """
     extension = get_file_extension(filename)
     return extension in allowed_extensions
-
-
-def generate_unique_filename(filename: str, upload_folder: str) -> str:
-    """
-    Generate a unique filename for an uploaded file to avoid overwriting.
-    
-    Args:
-        filename: Original filename
-        upload_folder: Folder where the file will be saved
-        
-    Returns:
-        Unique filename
-    """
-    base, extension = os.path.splitext(filename)
-    counter = 1
-    new_filename = filename
-    
-    # Check if file already exists and generate unique name
-    while os.path.exists(os.path.join(upload_folder, new_filename)):
-        new_filename = f"{base}_{counter}{extension}"
-        counter += 1
-    
-    return new_filename

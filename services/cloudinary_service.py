@@ -7,7 +7,7 @@ This module handles file storage operations using Cloudinary.
 import logging
 import cloudinary
 import cloudinary.uploader
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, BinaryIO
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -41,12 +41,13 @@ class CloudinaryService:
             logger.error(f"Error initializing Cloudinary service: {e}")
             raise CloudinaryError(f"Failed to initialize Cloudinary service: {e}")
     
-    def upload_file(self, file_path: str, folder: Optional[str] = None) -> Dict[str, Any]:
+    def upload_file_stream(self, file_stream: BinaryIO, filename: str, folder: Optional[str] = None) -> Dict[str, Any]:
         """
-        Upload a file to Cloudinary.
+        Upload a file stream directly to Cloudinary without saving locally.
         
         Args:
-            file_path: Path to the file to upload
+            file_stream: File stream to upload
+            filename: Original filename (used for reference)
             folder: Optional folder to store the file in
             
         Returns:
@@ -60,11 +61,14 @@ class CloudinaryService:
             options = {"resource_type": "raw"}
             if folder:
                 options["folder"] = folder
+                
+            # Add original filename as public_id if needed
+            # options["public_id"] = os.path.splitext(filename)[0]
             
-            # Upload the file
-            response = cloudinary.uploader.upload(file_path, **options)
+            # Upload the file stream directly
+            response = cloudinary.uploader.upload(file_stream, **options)
             
-            logger.info(f"File uploaded to Cloudinary: {response.get('secure_url')}")
+            logger.info(f"File '{filename}' uploaded to Cloudinary: {response.get('secure_url')}")
             return response
             
         except Exception as e:

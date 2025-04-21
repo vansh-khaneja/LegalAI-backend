@@ -11,10 +11,6 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-# Create uploads directory
-UPLOAD_FOLDER = 'uploads'
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
 # Database configuration
 DB_CONFIG = {
     "url": os.getenv("DB_URL"),

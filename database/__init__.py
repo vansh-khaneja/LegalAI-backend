@@ -12,6 +12,10 @@ from database.db_utils import (
     update_entry,
     delete_entry,
     clear_database,
+    create_default_user,
+    update_user_fields,
+    get_user,
+    append_to_context_history_queue,
     # Legacy names for backward compatibility
     InitDatabase,
     AddEntry,
@@ -27,6 +31,10 @@ __all__ = [
     'update_entry',
     'delete_entry',
     'clear_database',
+    'create_default_user',
+    'update_user_fields',
+    'get_user',
+    'append_to_context_history_queue',
     # Legacy names
     'InitDatabase',
     'AddEntry',

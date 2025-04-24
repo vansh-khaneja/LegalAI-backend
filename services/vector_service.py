@@ -101,7 +101,7 @@ class VectorService:
             logger.error(f"Error ensuring collection exists: {e}")
             raise VectorServiceError(f"Failed to ensure collection exists: {e}")
     
-    def store_document_vectors(self, chunks: List[str], file_id: int) -> None:
+    def store_document_vectors(self, chunks: List[str], file_id: int,case_type:str) -> None:
         """
         Store document chunks as vectors in Qdrant.
         
@@ -127,6 +127,7 @@ class VectorService:
                     "payload": {
                         "text": chunks[i],
                         "file_id": file_id,
+                        "case_type": case_type
                     }
                 }
                 for i, vec in enumerate(vectors)
@@ -150,17 +151,18 @@ class VectorService:
             logger.error(f"Error storing document vectors: {e}")
             raise VectorServiceError(f"Failed to store document vectors: {e}")
     
-    def search(self, query: str, limit: int = 6) -> List[Dict[str, Any]]:
+    def search(self, query: str, case_types: List[str] = None, limit: int = 6) -> List[Dict[str, Any]]:
         """
-        Search for similar document chunks based on a query.
+        Search for similar document chunks based on a query, filtered by one or more case_types.
         
         Args:
             query: Search query text
+            case_types: List of case types to filter by. If None or empty, no filtering by case_type is applied.
             limit: Maximum number of results to return
-            
+                
         Returns:
             List of search results with payload and score
-            
+                
         Raises:
             VectorServiceError: If search fails
         """
@@ -175,21 +177,45 @@ class VectorService:
                 "with_payload": True
             }
             
+            # Only add filter if case_types is specified and not empty
+            if case_types and len(case_types) > 0:
+                if len(case_types) == 1:
+                    # Single case type filter
+                    search_payload["filter"] = {
+                        "must": [
+                            {
+                                "key": "case_type",
+                                "match": { "value": case_types[0] }
+                            }
+                        ]
+                    }
+                else:
+                    # Multiple case types filter using OR logic
+                    filter_conditions = []
+                    for case_type in case_types:
+                        filter_conditions.append({
+                            "key": "case_type",
+                            "match": { "value": case_type }
+                        })
+                    
+                    search_payload["filter"] = {
+                        "should": filter_conditions
+                    }
+            
             # Search in Qdrant
             response = requests.post(
                 f"{self.qdrant_url}/collections/{self.collection_name}/points/search",
                 headers=self.headers,
                 data=json.dumps(search_payload)
             )
+
             
             if response.status_code != 200:
-                raise VectorServiceError(
-                    f"Search failed: {response.json()}"
-                )
+                raise VectorServiceError(f"Search failed: {response.json()}")
             
             # Return search results
             return response.json().get("result", [])
-            
+        
         except Exception as e:
             logger.error(f"Error searching: {e}")
             raise VectorServiceError(f"Search failed: {e}")

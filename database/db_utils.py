@@ -9,6 +9,8 @@ import json
 import logging
 import psycopg2
 from typing import Dict, Any, Optional, Union, Tuple
+from psycopg2 import sql
+import hashlib
 
 # Configure logging
 logging.basicConfig(
@@ -90,7 +92,21 @@ def init_database(db_url: str) -> None:
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """
+
+        create_user_query = """
+            CREATE TABLE IF NOT EXISTS users (
+                auth_id TEXT PRIMARY KEY,
+                app_id BIGINT NOT NULL,
+                chat_history TEXT NOT NULL,
+                is_premium BOOLEAN NOT NULL DEFAULT FALSE,
+                context_history INTEGER[] NOT NULL DEFAULT '{}',
+                created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+            );
+        """
+
+
         execute_query(db_url, create_table_query)
+        execute_query(db_url, create_user_query)
         logger.info("Database initialized successfully. Tables created if they didn't exist.")
     except Exception as e:
         logger.error(f"Failed to initialize database: {e}")
@@ -306,6 +322,117 @@ def delete_entry(db_url: str, file_id: int) -> str:
         logger.error(f"Error deleting entry with file_id {file_id}: {e}")
         return json.dumps({"error": f"An error occurred: {e}"})
 
+
+def clerk_id_to_app_id(auth_id: str) -> int:
+    """Convert Clerk ID to safe PostgreSQL BIGINT range (-2^63 to 2^63-1)"""
+    hash_digest = hashlib.sha256(auth_id.encode()).hexdigest()
+    max_bigint = 9223372036854775807
+    return int(hash_digest[:15], 16) % max_bigint
+
+def user_exists(db_url: str, auth_id: str) -> bool:
+    """Check if user exists by auth_id"""
+    query = "SELECT 1 FROM users WHERE auth_id = %s LIMIT 1"
+    result = execute_query(db_url, query, (auth_id,), fetch_one=True)
+    return result is not None  
+
+
+def create_default_user(db_url: str, auth_id: str) -> None:
+    """Create a user with default values if not already exists."""
+    if not user_exists(db_url, auth_id):
+        app_id = clerk_id_to_app_id(auth_id)
+        chat_history = "[]"
+        is_premium = False
+        query = sql.SQL("""
+            INSERT INTO users (auth_id, app_id, chat_history, is_premium)
+            VALUES (%s, %s, %s, %s)
+        """)
+        execute_query(db_url, query, (auth_id, app_id, chat_history, is_premium))
+        print("Default user created successfully")
+    else:
+        print("User already exists.")
+
+
+def update_user_fields(
+    db_url: str,
+    auth_id: str,
+    chat_history: Optional[str] = None,
+    is_premium: Optional[bool] = None
+) -> None:
+    """Update only the provided user fields for a given auth_id."""
+    # Build the SET clause dynamically
+    fields = {}
+    if chat_history is not None:
+        fields["chat_history"] = chat_history
+    if is_premium is not None:
+        fields["is_premium"] = is_premium
+
+    if not fields:
+        print("No fields provided to update.")
+        return
+
+    # Dynamically build the SQL query
+    set_clauses = [f"{key} = %s" for key in fields]
+    values = list(fields.values())
+    values.append(auth_id)  # auth_id is used in WHERE clause
+
+    query = f"""
+        UPDATE users
+        SET {', '.join(set_clauses)}
+        WHERE auth_id = %s
+    """
+
+    execute_query(db_url, query, tuple(values))
+    print("User updated successfully.")
+
+
+def get_user(db_url: str, auth_id: str) -> Optional[Dict[str, Any]]:
+    """Retrieve all user data for a given auth_id."""
+    query = "SELECT * FROM users WHERE auth_id = %s"
+    result = execute_query(db_url, query, (auth_id,), fetch_one=True)
+    
+    if result:
+        print("User data fetched successfully.")
+    else:
+        print("User not found.")
+        
+    return result
+
+
+
+def append_to_context_history_queue(
+    db_url: str,
+    auth_id: str,
+    new_values: list[int]
+) -> None:
+    """
+    Append new_values onto the user's context_history, then
+    keep only the last 16 elements (dropping the oldest as needed).
+    """
+    query = """
+    WITH newvals AS (
+      SELECT %s::integer[] AS v
+    ),
+    appended AS (
+      SELECT
+        u.auth_id,
+        u.context_history || newvals.v        AS full_arr,
+        array_length(u.context_history || newvals.v, 1) AS len
+      FROM users u
+      CROSS JOIN newvals
+      WHERE u.auth_id = %s
+    )
+    UPDATE users AS u
+    SET context_history = CASE
+      WHEN a.len > 16
+        THEN a.full_arr[(a.len - 15) : a.len]
+      ELSE a.full_arr
+    END
+    FROM appended AS a
+    WHERE u.auth_id = a.auth_id;
+    """
+
+    execute_query(db_url, query, (new_values, auth_id))
+    print("Context history (queue) updated — max 16 entries kept.")
 
 # For backwards compatibility
 InitDatabase = init_database

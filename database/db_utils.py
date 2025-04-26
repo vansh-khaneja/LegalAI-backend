@@ -8,7 +8,7 @@ including initialization, data insertion, retrieval, and cleanup operations.
 import json
 import logging
 import psycopg2
-from typing import Dict, Any, Optional, Union, Tuple
+from typing import Dict, Any, Optional, Union, Tuple,List
 from psycopg2 import sql
 import hashlib
 
@@ -103,10 +103,22 @@ def init_database(db_url: str) -> None:
                 created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
             );
         """
+        chat_history_table_query = """
+        CREATE TABLE IF NOT EXISTS chat_history (
+            id SERIAL PRIMARY KEY,
+            auth_id TEXT NOT NULL,
+            session_id TEXT NOT NULL,
+            message TEXT NOT NULL,
+            sender TEXT NOT NULL,
+            timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (auth_id) REFERENCES users(auth_id) ON DELETE CASCADE
+        );
+    """
 
 
         execute_query(db_url, create_table_query)
         execute_query(db_url, create_user_query)
+        execute_query(db_url, chat_history_table_query)
         logger.info("Database initialized successfully. Tables created if they didn't exist.")
     except Exception as e:
         logger.error(f"Failed to initialize database: {e}")
@@ -433,6 +445,48 @@ def append_to_context_history_queue(
 
     execute_query(db_url, query, (new_values, auth_id))
     print("Context history (queue) updated — max 16 entries kept.")
+
+
+def add_chat_message(db_url: str, auth_id: str, session_id: str, message: str, sender: str) -> None:
+    """Store a single chat message in the chat_history table."""
+    query = """
+        INSERT INTO chat_history (auth_id, session_id, message, sender)
+        VALUES (%s, %s, %s, %s)
+    """
+    execute_query(db_url, query, (auth_id, session_id, message, sender))
+
+
+def get_chat_history(db_url: str, auth_id: str, session_id: Optional[str] = None) -> List[Dict[str, Any]]:
+    """Retrieve chat history for a user, optionally filtered by session."""
+    if session_id:
+        query = """
+            SELECT message, sender, timestamp FROM chat_history
+            WHERE auth_id = %s AND session_id = %s
+            ORDER BY timestamp
+        """
+        return execute_query(db_url, query, (auth_id, session_id), fetch_all=True) or []
+    else:
+        query = """
+            SELECT message, sender, timestamp FROM chat_history
+            WHERE auth_id = %s
+            ORDER BY timestamp
+        """
+        return execute_query(db_url, query, (auth_id,), fetch_all=True) or []
+    
+
+def get_unique_session_ids(db_url: str, auth_id: str) -> List[str]:
+    """Get all unique session IDs for a user."""
+    query = """
+        SELECT DISTINCT session_id
+        FROM chat_history
+        WHERE auth_id = %s
+        ORDER BY session_id;
+    """
+    result = execute_query(db_url, query, (auth_id,), fetch_all=True)  # <-- Fix is here
+    return [row[0] for row in result] if result else []
+
+
+
 
 # For backwards compatibility
 InitDatabase = init_database

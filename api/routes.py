@@ -38,7 +38,10 @@ from database.db_utils import (
     create_default_user,
     update_user_fields,
     get_user,
-    append_to_context_history_queue
+    append_to_context_history_queue,
+    add_chat_message,
+    get_chat_history,
+    get_unique_session_ids
 )
 
 from api.responses import (
@@ -187,7 +190,8 @@ def register_routes(app: Flask) -> None:
             question = data.get("question", "")
             # Get categories from request, defaults to None which will search all categories
             categories = data.get("categories", None)
-            
+            auth_id = data.get("auth_id", None)
+            print(f"Auth ID: {auth_id}")
             print(f"Request data: {data}")
             
             if not question:
@@ -211,7 +215,7 @@ def register_routes(app: Flask) -> None:
             # Handle case-based queries
             else:
                 # Generate query vector and search
-                search_results = vector_service.search(question, case_types=categories, limit=6)
+                search_results = vector_service.search(question,auth_id, case_types=categories, limit=6)
                 
                 # Build context from search results
                 context = ""
@@ -414,3 +418,97 @@ def register_routes(app: Flask) -> None:
         except Exception as e:
             logger.error(f"Error in append_context_history: {e}")
             return error_response(f"Failed to append context: {str(e)}", 500)
+    
+    
+    @app.route("/add_chat_message", methods=["POST"])
+    def add_chat_message_route() -> Response:
+        """
+        Handle chat message addition.
+        
+        Returns:
+            JSON response with chat message addition result
+        """
+        try:
+            # Get user data from request
+            data = request.get_json()
+            auth_id = data.get("auth_id", "")
+            session_id = data.get("session_id", "")
+            sender = data.get("sender", "")
+            message = data.get("message", "")
+            
+            if not auth_id or not message:
+                return bad_request_response("auth_id and message required")
+            
+            # Add chat message in database
+            add_chat_message(
+                db_url=DB_CONFIG["url"],
+                auth_id=auth_id,
+                session_id=session_id,
+                sender=sender,
+                message=message
+            )
+            
+            return success_response(message="Chat message added successfully")
+            
+        except Exception as e:
+            logger.error(f"Error in add_chat_message: {e}")
+            return error_response(f"Failed to add chat message: {str(e)}", 500)
+        
+
+    @app.route("/get_chat_history", methods=["POST"])
+    def get_chat_history_route() -> Response:
+        """
+        Handle chat history retrieval.
+        
+        Returns:
+            JSON response with chat history
+        """
+        try:
+            # Get user data from request
+            data = request.get_json()
+            auth_id = data.get("auth_id", "")
+            session_id = data.get("session_id", "")
+            
+            if not auth_id:
+                return bad_request_response("auth_id required")
+            
+            # Retrieve chat history from database
+            chat_history = get_chat_history(
+                db_url=DB_CONFIG["url"],
+                auth_id=auth_id,
+                session_id=session_id
+            )
+            
+            return success_response(data=chat_history)
+            
+        except Exception as e:
+            logger.error(f"Error in get_chat_history: {e}")
+            return error_response(f"Failed to retrieve chat history: {str(e)}", 500)
+        
+    @app.route("/get_unique_session_ids", methods=["POST"])
+    def get_unique_session_ids_route() -> Response:
+        """
+        Handle unique session ID retrieval.
+        
+        Returns:
+            JSON response with unique session IDs
+        """
+        try:
+            # Get user data from request
+            data = request.get_json()
+            auth_id = data.get("auth_id", "")
+            
+            if not auth_id:
+                return bad_request_response("auth_id required")
+            
+            # Retrieve unique session IDs from database
+            session_ids = get_unique_session_ids(
+                db_url=DB_CONFIG["url"],
+                auth_id=auth_id
+            )
+            
+            return success_response(data=session_ids)
+            
+        except Exception as e:
+            logger.error(f"Error in get_unique_session_ids: {e}")
+            return error_response(f"Failed to retrieve unique session IDs: {str(e)}", 500)

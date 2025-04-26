@@ -11,8 +11,13 @@ import requests
 from typing import List, Dict, Any, Optional
 
 from sentence_transformers import SentenceTransformer
-
+from database.db_utils import get_user
 # Configure logging
+
+
+from config import (
+    DB_CONFIG, 
+)
 logger = logging.getLogger(__name__)
 
 
@@ -151,71 +156,89 @@ class VectorService:
             logger.error(f"Error storing document vectors: {e}")
             raise VectorServiceError(f"Failed to store document vectors: {e}")
     
-    def search(self, query: str, case_types: List[str] = None, limit: int = 6) -> List[Dict[str, Any]]:
-        """
-        Search for similar document chunks based on a query, filtered by one or more case_types.
-        
-        Args:
-            query: Search query text
-            case_types: List of case types to filter by. If None or empty, no filtering by case_type is applied.
-            limit: Maximum number of results to return
-                
-        Returns:
-            List of search results with payload and score
-                
-        Raises:
-            VectorServiceError: If search fails
-        """
+    def search(self, query: str, auth_id: str, case_types: List[str] = None, limit: int = 6) -> List[Dict[str, Any]]:
         try:
-            # Generate vector for query
             query_vector = self.encode_text([query])[0].tolist()
-            
-            # Prepare search payload
-            search_payload = {
+            context_ids = None
+            initial_results = []
+
+            if auth_id:
+                context_ids = get_user(DB_CONFIG["url"], auth_id)[5]
+
+                # Build base filter with context IDs
+                filter_conditions = [{"has_id": context_ids}]
+
+                # Add case_type filter if specified
+                if case_types:
+                    if len(case_types) == 1:
+                        filter_conditions.append({
+                            "key": "case_type",
+                            "match": {"value": case_types[0]}
+                        })
+                    else:
+                        filter_conditions.append({
+                            "should": [
+                                {"key": "case_type", "match": {"value": ct}}
+                                for ct in case_types
+                            ]
+                        })
+
+                payload = {
+                    "vector": query_vector,
+                    "filter": {"must": filter_conditions},
+                    "limit": 6,
+                    "with_payload": True,
+                    "with_vector": False
+                }
+
+                response = requests.post(
+                    f"{self.qdrant_url}/collections/{self.collection_name}/points/search",
+                    headers=self.headers,
+                    json=payload
+                )
+
+                if response.status_code != 200:
+                    raise VectorServiceError(f"Search (context) failed: {response.json()}")
+                
+                initial_results = response.json().get("result", [])
+                good_results = [r for r in initial_results if r["score"] >= 0.5]
+                
+                if len(good_results) >= 3:
+                    print("Found good results in context search.")
+                    return good_results
+
+            # Fallback search (same case_type logic applies)
+            fallback_payload = {
                 "vector": query_vector,
                 "limit": limit,
                 "with_payload": True
             }
-            
-            # Only add filter if case_types is specified and not empty
-            if case_types and len(case_types) > 0:
+
+            if case_types:
                 if len(case_types) == 1:
-                    # Single case type filter
-                    search_payload["filter"] = {
-                        "must": [
-                            {
-                                "key": "case_type",
-                                "match": { "value": case_types[0] }
-                            }
-                        ]
+                    fallback_payload["filter"] = {
+                        "must": [{"key": "case_type", "match": {"value": case_types[0]}}]
                     }
                 else:
-                    # Multiple case types filter using OR logic
-                    filter_conditions = []
-                    for case_type in case_types:
-                        filter_conditions.append({
-                            "key": "case_type",
-                            "match": { "value": case_type }
-                        })
-                    
-                    search_payload["filter"] = {
-                        "should": filter_conditions
+                    fallback_payload["filter"] = {
+                        "should": [
+                            {"key": "case_type", "match": {"value": ct}}
+                            for ct in case_types
+                        ]
                     }
-            
-            # Search in Qdrant
-            response = requests.post(
+
+            fallback_response = requests.post(
                 f"{self.qdrant_url}/collections/{self.collection_name}/points/search",
                 headers=self.headers,
-                data=json.dumps(search_payload)
+                json=fallback_payload
             )
 
+            if fallback_response.status_code != 200:
+                raise VectorServiceError(f"Fallback search failed: {fallback_response.json()}")
             
-            if response.status_code != 200:
-                raise VectorServiceError(f"Search failed: {response.json()}")
-            
-            # Return search results
-            return response.json().get("result", [])
-        
+            print("Fallback search executed.")
+            return fallback_response.json().get("result", [])
+
         except Exception as e:
             logger.error(f"Error searching: {e}")
             raise VectorServiceError(f"Search failed: {e}")

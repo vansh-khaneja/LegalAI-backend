@@ -16,6 +16,9 @@ from database.db_utils import (
     update_user_fields,
     get_user,
     append_to_context_history_queue,
+    add_chat_message,
+    get_chat_history,
+    get_unique_session_ids,
     # Legacy names for backward compatibility
     InitDatabase,
     AddEntry,
@@ -35,6 +38,9 @@ __all__ = [
     'update_user_fields',
     'get_user',
     'append_to_context_history_queue',
+    'add_chat_message',
+    'get_chat_history',
+    'get_unique_session_ids',
     # Legacy names
     'InitDatabase',
     'AddEntry',

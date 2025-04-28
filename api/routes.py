@@ -109,6 +109,7 @@ def register_routes(app: Flask) -> None:
             
             # Get case type from request
             case_type = request.form.get("caseType", "unknown")
+            date = request.form.get("date", "unknown")
             logger.info(f"Received case type: {case_type}")
             
             # Validate file type
@@ -130,7 +131,7 @@ def register_routes(app: Flask) -> None:
             file_id = random.randint(10000, 99999)
             
             # Store document vectors
-            vector_service.store_document_vectors(chunks, file_id,case_type)
+            vector_service.store_document_vectors(chunks, file_id,case_type,date)
             logger.info(f"Stored vectors for file_id {file_id}")
             
             # Reset stream position for summarization
@@ -231,6 +232,7 @@ def register_routes(app: Flask) -> None:
                     text = payload.get("text")
                     score = result.get("score")
                     id = result.get("id")
+                    date = payload.get("date")
                     
                     context += f"{i}Text: {text}\n\n"  # Added extra newline for better separation
                     
@@ -252,6 +254,7 @@ def register_routes(app: Flask) -> None:
                             "file_url": data.get("file_url"),
                             "file_summary": data.get("file_summary"),
                             "case_type": data.get("case_type"),
+                            "date": date,
                             
                         }
                     

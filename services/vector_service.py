@@ -43,6 +43,7 @@ class VectorService:
         self.qdrant_url = qdrant_url
         self.api_key = api_key
         self.collection_name = collection_name
+        print("collection name",collection_name)
         self.model = SentenceTransformer(model_name)
         self.headers = {
             "Content-Type": "application/json",
@@ -106,7 +107,7 @@ class VectorService:
             logger.error(f"Error ensuring collection exists: {e}")
             raise VectorServiceError(f"Failed to ensure collection exists: {e}")
     
-    def store_document_vectors(self, chunks: List[str], file_id: int,case_type:str) -> None:
+    def store_document_vectors(self, chunks: List[str], file_id: int,case_type:str,date:str) -> None:
         """
         Store document chunks as vectors in Qdrant.
         
@@ -132,7 +133,8 @@ class VectorService:
                     "payload": {
                         "text": chunks[i],
                         "file_id": file_id,
-                        "case_type": case_type
+                        "case_type": case_type,
+                        "date": date,
                     }
                 }
                 for i, vec in enumerate(vectors)

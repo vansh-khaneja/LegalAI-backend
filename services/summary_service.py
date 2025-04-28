@@ -1,10 +1,5 @@
-"""
-Summarization service for the Legal AI application.
-
-This module handles document summarization using language models.
-"""
-
-from langchain.chat_models import ChatOpenAI
+""" Summarization service for the Legal AI application.  This module handles document summarization using language models. """
+from langchain_community.chat_models import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from typing import BinaryIO
@@ -14,18 +9,16 @@ from langchain.chat_models import ChatOpenAI
 from langchain.chains.summarize import load_summarize_chain
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from PyPDF2 import PdfReader
+import docx  # Added for handling .docx files
 import io
 import logging
-
 
 # Configure logging
 logger = logging.getLogger(__name__)
 
-
 class SummarizationError(Exception):
     """Custom exception for Summarization service errors."""
     pass
-
 
 class SummarizationService:
     """Service for handling Summarization operations."""
@@ -40,7 +33,7 @@ class SummarizationService:
         """
         try:
             self.model_name = model_name
-
+            
             self.llm = ChatOpenAI(
                 openai_api_key=groq_api_key,
                 openai_api_base="https://api.groq.com/openai/v1",
@@ -81,6 +74,10 @@ class SummarizationService:
                     content = page.extract_text()
                     if content:
                         text += content
+            elif file_name.lower().endswith('.docx'):
+                # Handle .docx files using python-docx library
+                doc = docx.Document(file_stream)
+                text = '\n'.join([paragraph.text for paragraph in doc.paragraphs])
             else:
                 # For other file types, rely on the text that should have been extracted
                 # by document_service already
@@ -90,7 +87,7 @@ class SummarizationService:
             # Split the text into manageable chunks
             text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=20)
             chunks = text_splitter.create_documents([text])
-
+            
             # Use the summarization chain
             chain = load_summarize_chain(
                 self.llm,
@@ -98,7 +95,7 @@ class SummarizationService:
                 verbose=True
             )
             summary = chain.run(chunks)
-
+            
             return summary
         except Exception as e:
             logger.error(f"Error summarizing file '{file_name}': {e}")

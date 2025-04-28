@@ -1,34 +1,44 @@
 """
-Legal AI Application - Main Entry Point
+Legal AI Application - Main Entry Point (FastAPI Version)
 
 This is the main entry point for the Legal AI application.
-It initializes the Flask application and registers the API routes.
+It initializes the FastAPI application and registers the API routes.
 """
 
 import os
-from flask import Flask
-from flask_cors import CORS
+from fastapi import FastAPI, Depends
+from fastapi.middleware.cors import CORSMiddleware
 
-from config import FLASK_CONFIG
+from config import FASTAPI_CONFIG
 from utils.logging_utils import setup_logging
 from api.routes import register_routes
 
 
-def create_app() -> Flask:
+def create_app() -> FastAPI:
     """
-    Create and configure the Flask application.
+    Create and configure the FastAPI application.
     
     Returns:
-        Configured Flask application instance
+        Configured FastAPI application instance
     """
     # Set up logging
     setup_logging(log_level="INFO", log_file="logs/legalai.log")
     
-    # Create Flask application
-    app = Flask(__name__)
+    # Create FastAPI application
+    app = FastAPI(
+        title="Legal AI API",
+        description="API for processing, analyzing, and retrieving information from legal documents",
+        version="1.0.0"
+    )
     
     # Enable CORS
-    CORS(app)
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],  # Adjust for production
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
     
     # Register API routes
     register_routes(app)
@@ -36,10 +46,16 @@ def create_app() -> Flask:
     return app
 
 
-# Application entry point
+# Create FastAPI application instance
+app = create_app()
+
+
+# Run with uvicorn if executed directly
 if __name__ == "__main__":
-    app = create_app()
-    app.run(
-        debug=FLASK_CONFIG["debug"],
-        port=FLASK_CONFIG["port"]
+    import uvicorn
+    uvicorn.run(
+        "app:app",
+        host=FASTAPI_CONFIG["host"],
+        port=FASTAPI_CONFIG["port"],
+        reload=FASTAPI_CONFIG["reload"]
     )

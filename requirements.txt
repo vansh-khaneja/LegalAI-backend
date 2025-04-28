@@ -1,5 +1,6 @@
-flask
-flask-cors
+fastapi
+uvicorn
+python-multipart
 python-dotenv
 psycopg2-binary
 cloudinary
@@ -16,3 +17,5 @@ pypdf
 pypdf2
 openai
 langchain_community
+httpx
+starlette

@@ -1,5 +1,5 @@
 """
-Vector embedding and search service for the Legal AI application.
+Vector embedding and search service for the Legal AI application (FastAPI Version).
 
 This module handles document embedding, vector database operations,
 and semantic search functionality.
@@ -7,14 +7,13 @@ and semantic search functionality.
 
 import json
 import logging
-import requests
+import httpx
 from typing import List, Dict, Any, Optional
 
 from sentence_transformers import SentenceTransformer
 from database.db_utils import get_user
+
 # Configure logging
-
-
 from config import (
     DB_CONFIG, 
 )
@@ -43,12 +42,15 @@ class VectorService:
         self.qdrant_url = qdrant_url
         self.api_key = api_key
         self.collection_name = collection_name
-        print("collection name",collection_name)
+        print("collection name", collection_name)
+        # Load the model - this can be a bit slow, but only happens once at startup
         self.model = SentenceTransformer(model_name)
         self.headers = {
             "Content-Type": "application/json",
             "api-key": api_key
         }
+        # Create an HTTP client for reuse
+        self.client = httpx.Client(timeout=30.0)
     
     def encode_text(self, texts: List[str]) -> List[List[float]]:
         """
@@ -75,7 +77,7 @@ class VectorService:
         """
         try:
             # Check if collection exists
-            response = requests.get(
+            response = self.client.get(
                 f"{self.qdrant_url}/collections/{self.collection_name}", 
                 headers=self.headers
             )
@@ -90,7 +92,7 @@ class VectorService:
                     "vectors": {"size": vector_size, "distance": "Cosine"}
                 }
                 
-                create_response = requests.put(
+                create_response = self.client.put(
                     f"{self.qdrant_url}/collections/{self.collection_name}", 
                     headers=self.headers, 
                     json=create_payload
@@ -107,13 +109,15 @@ class VectorService:
             logger.error(f"Error ensuring collection exists: {e}")
             raise VectorServiceError(f"Failed to ensure collection exists: {e}")
     
-    def store_document_vectors(self, chunks: List[str], file_id: int,case_type:str,date:str) -> None:
+    def store_document_vectors(self, chunks: List[str], file_id: int, case_type: str, date: str) -> None:
         """
         Store document chunks as vectors in Qdrant.
         
         Args:
             chunks: List of text chunks from the document
             file_id: Unique identifier for the file
+            case_type: Type of legal case
+            date: Date of the document
             
         Raises:
             VectorServiceError: If vector storage fails
@@ -141,7 +145,7 @@ class VectorService:
             ]
             
             # Store vectors in Qdrant
-            upsert_response = requests.put(
+            upsert_response = self.client.put(
                 f"{self.qdrant_url}/collections/{self.collection_name}/points?wait=true",
                 headers=self.headers,
                 json={"points": points}
@@ -158,7 +162,120 @@ class VectorService:
             logger.error(f"Error storing document vectors: {e}")
             raise VectorServiceError(f"Failed to store document vectors: {e}")
     
+    async def search_async(self, query: str, auth_id: str, case_types: List[str] = None, limit: int = 6) -> List[Dict[str, Any]]:
+        """
+        Async version of search method for FastAPI.
+        
+        Args:
+            query: Query text
+            auth_id: User authentication ID
+            case_types: List of case types to filter by
+            limit: Maximum number of results to return
+            
+        Returns:
+            List of search results
+        """
+        try:
+            query_vector = self.encode_text([query])[0].tolist()
+            context_ids = None
+            initial_results = []
+
+            # Use async HTTP client
+            async with httpx.AsyncClient(timeout=30.0) as async_client:
+                if auth_id:
+                    context_ids = get_user(DB_CONFIG["url"], auth_id)[5]
+
+                    # Build base filter with context IDs
+                    filter_conditions = [{"has_id": context_ids}]
+
+                    # Add case_type filter if specified
+                    if case_types:
+                        if len(case_types) == 1:
+                            filter_conditions.append({
+                                "key": "case_type",
+                                "match": {"value": case_types[0]}
+                            })
+                        else:
+                            filter_conditions.append({
+                                "should": [
+                                    {"key": "case_type", "match": {"value": ct}}
+                                    for ct in case_types
+                                ]
+                            })
+
+                    payload = {
+                        "vector": query_vector,
+                        "filter": {"must": filter_conditions},
+                        "limit": 6,
+                        "with_payload": True,
+                        "with_vector": False
+                    }
+
+                    response = await async_client.post(
+                        f"{self.qdrant_url}/collections/{self.collection_name}/points/search",
+                        headers=self.headers,
+                        json=payload
+                    )
+
+                    if response.status_code != 200:
+                        raise VectorServiceError(f"Search (context) failed: {response.json()}")
+                    
+                    initial_results = response.json().get("result", [])
+                    good_results = [r for r in initial_results if r["score"] >= 0.5]
+                    
+                    if len(good_results) >= 3:
+                        logger.info("Found good results in context search.")
+                        return good_results
+
+                # Fallback search (same case_type logic applies)
+                fallback_payload = {
+                    "vector": query_vector,
+                    "limit": limit,
+                    "with_payload": True
+                }
+
+                if case_types:
+                    if len(case_types) == 1:
+                        fallback_payload["filter"] = {
+                            "must": [{"key": "case_type", "match": {"value": case_types[0]}}]
+                        }
+                    else:
+                        fallback_payload["filter"] = {
+                            "should": [
+                                {"key": "case_type", "match": {"value": ct}}
+                                for ct in case_types
+                            ]
+                        }
+
+                fallback_response = await async_client.post(
+                    f"{self.qdrant_url}/collections/{self.collection_name}/points/search",
+                    headers=self.headers,
+                    json=fallback_payload
+                )
+
+                if fallback_response.status_code != 200:
+                    raise VectorServiceError(f"Fallback search failed: {fallback_response.json()}")
+                
+                logger.info("Fallback search executed.")
+                return fallback_response.json().get("result", [])
+
+        except Exception as e:
+            logger.error(f"Error searching: {e}")
+            raise VectorServiceError(f"Search failed: {e}")
+    
     def search(self, query: str, auth_id: str, case_types: List[str] = None, limit: int = 6) -> List[Dict[str, Any]]:
+        """
+        Synchronous search method (kept for backward compatibility)
+        
+        Args:
+            query: Query text
+            auth_id: User authentication ID
+            case_types: List of case types to filter by
+            limit: Maximum number of results to return
+            
+        Returns:
+            List of search results
+        """
         try:
             query_vector = self.encode_text([query])[0].tolist()
             context_ids = None
@@ -193,7 +310,7 @@ class VectorService:
                     "with_vector": False
                 }
 
-                response = requests.post(
+                response = self.client.post(
                     f"{self.qdrant_url}/collections/{self.collection_name}/points/search",
                     headers=self.headers,
                     json=payload
@@ -206,7 +323,7 @@ class VectorService:
                 good_results = [r for r in initial_results if r["score"] >= 0.5]
                 
                 if len(good_results) >= 3:
-                    print("Found good results in context search.")
+                    logger.info("Found good results in context search.")
                     return good_results
 
             # Fallback search (same case_type logic applies)
@@ -229,7 +346,7 @@ class VectorService:
                         ]
                     }
 
-            fallback_response = requests.post(
+            fallback_response = self.client.post(
                 f"{self.qdrant_url}/collections/{self.collection_name}/points/search",
                 headers=self.headers,
                 json=fallback_payload
@@ -238,9 +355,14 @@ class VectorService:
             if fallback_response.status_code != 200:
                 raise VectorServiceError(f"Fallback search failed: {fallback_response.json()}")
             
-            print("Fallback search executed.")
+            logger.info("Fallback search executed.")
             return fallback_response.json().get("result", [])
 
         except Exception as e:
             logger.error(f"Error searching: {e}")
             raise VectorServiceError(f"Search failed: {e}")
+            
+    def __del__(self):
+        """Clean up resources when object is destroyed."""
+        if hasattr(self, 'client') and self.client:
+            self.client.close()

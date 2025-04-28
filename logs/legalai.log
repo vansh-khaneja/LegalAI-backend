@@ -1,0 +1,52 @@
+2025-04-28 17:25:03,443 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-04-28 17:25:03,444 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: jinaai/jina-embeddings-v2-base-es
+2025-04-28 17:25:08,114 - services.cloudinary_service - INFO - Cloudinary service initialized
+2025-04-28 17:25:08,160 - services.llm_service - INFO - LLM service initialized
+2025-04-28 17:25:08,952 - services.summary_service - INFO - Summarizer service initialized
+2025-04-28 17:25:17,322 - database.db_utils - INFO - Database initialized successfully. Tables created if they didn't exist.
+2025-04-28 17:29:10,287 - api.routes - INFO - Received question: what are the consequecies of robbery
+2025-04-28 17:29:10,288 - api.routes - INFO - Categories filter: None
+2025-04-28 17:29:11,008 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-28 17:29:11,045 - api.routes - INFO - Query routed to: casebased
+2025-04-28 17:29:12,533 - httpx - INFO - HTTP Request: POST https://6d93b83b-844e-469e-8bd1-dbcb601443ce.us-east4-0.gcp.cloud.qdrant.io:6333/collections/legalai-vectordb/points/search "HTTP/1.1 200 OK"
+2025-04-28 17:29:12,538 - services.vector_service - INFO - Fallback search executed.
+2025-04-28 17:29:14,812 - database.db_utils - INFO - Retrieved from database - file_id: 11050, file_url: https://res.cloudinary.com/duqlsudvy/raw/upload/v1745804085/Ficha%2520SL3491-2019.pdf, file_summary: Here is a concise summary:
+
+The Colombian Supreme Court ruled in favor of the Sintraenfi union in a labor dispute with Bancolombia S.A. The court upheld the collective agreement, which granted 600 days of paid leave to union members, and rejected the bank's arguments that this was excessive and unfair to non-union employees. The court also emphasized the importance of freedom of expression and association for labor unions and workers, and clarified the scope of its own competence in reviewing labor arbitration decisions. Additionally, the court established that arbitrators have the power to create benefits and rights for workers and their families, as long as they are not contrary to labor law and social security law., case_type: labor
+2025-04-28 17:29:17,016 - database.db_utils - INFO - Retrieved from database - file_id: 96650, file_url: https://res.cloudinary.com/duqlsudvy/raw/upload/v1745839517/FICHA%2520STC7617-2021.docx, file_summary: Here is a concise summary:
+
+The Constitutional Court dismissed an action against a judicial decision, ruling that the petitioner failed to demonstrate justification for the delay and did not exercise available means to impugn the competence of the court. The court also found that the petitioner's failure to use available means of defense was a consequence of their own negligence. The court confirmed the petitioner's right to seek restitutive action and assistance from the Public Defender's Office., case_type: constitutional
+2025-04-28 17:29:19,319 - database.db_utils - WARNING - No data found for file_id 89907, returning default values
+2025-04-28 17:29:21,560 - database.db_utils - INFO - Retrieved from database - file_id: 89611, file_url: https://res.cloudinary.com/duqlsudvy/raw/upload/v1745826008/AC016-2022-2021-04722-00.pdf, file_summary: Here is a concise summary:
+
+The Supreme Court of Colombia ruled that the 48th Civil Circuit Court of the Republic has jurisdiction over a lawsuit filed by the National Infrastructure Agency (ANI) against the heirs of Joaquín Alfredo Guerra Tulena, regarding the expropriation of a property for the construction of an oil pipeline. The court held that, as a public entity, ANI has special guarantees that cannot be waived, and the case should be heard by the court with jurisdiction over public entities., case_type: civil
+2025-04-28 17:29:23,829 - database.db_utils - INFO - Retrieved from database - file_id: 95032, file_url: https://res.cloudinary.com/duqlsudvy/raw/upload/v1745839580/FICHA%2520STC8109-2021.docx, file_summary: Here is a concise summary:
+
+The Colombian Constitutional Court ruled that the Second Civil Court of Girardot Circuit violated a plaintiff's constitutional rights by not providing access to her digital case file. The court ordered the court to send the digital link and implement a plan to digitize all court files in the circuit, emphasizing the importance of technology in ensuring access to justice and adapting to the digital landscape., case_type: constitutional
+2025-04-28 17:29:26,011 - database.db_utils - INFO - Retrieved from database - file_id: 73192, file_url: https://res.cloudinary.com/duqlsudvy/raw/upload/v1745839678/FICHA%2520STC8153-2021.docx, file_summary: Here is a concise summary:
+
+A plaintiff filed an appeal against a court decision rejecting their demand for ownership of a property. The Constitutional Court ruled that the decision was not arbitrary and not contrary to law. The court found that the property was subject to a process of extinction of dominion and that the decision was based on a valid legal criterion. The court also held that the measures taken by the authorities were constitutional and lawful. The appeal was dismissed, and the court's decision was upheld., case_type: constitutional
+2025-04-28 17:29:27,444 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-28 17:30:22,039 - api.routes - INFO - Received question: what are the consequecies of robbery
+2025-04-28 17:30:22,040 - api.routes - INFO - Categories filter: None
+2025-04-28 17:30:22,643 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-28 17:30:22,647 - api.routes - INFO - Query routed to: casebased
+2025-04-28 17:30:23,762 - httpx - INFO - HTTP Request: POST https://6d93b83b-844e-469e-8bd1-dbcb601443ce.us-east4-0.gcp.cloud.qdrant.io:6333/collections/legalai-vectordb/points/search "HTTP/1.1 200 OK"
+2025-04-28 17:30:23,763 - services.vector_service - INFO - Fallback search executed.
+2025-04-28 17:30:26,277 - database.db_utils - INFO - Retrieved from database - file_id: 11050, file_url: https://res.cloudinary.com/duqlsudvy/raw/upload/v1745804085/Ficha%2520SL3491-2019.pdf, file_summary: Here is a concise summary:
+
+The Colombian Supreme Court ruled in favor of the Sintraenfi union in a labor dispute with Bancolombia S.A. The court upheld the collective agreement, which granted 600 days of paid leave to union members, and rejected the bank's arguments that this was excessive and unfair to non-union employees. The court also emphasized the importance of freedom of expression and association for labor unions and workers, and clarified the scope of its own competence in reviewing labor arbitration decisions. Additionally, the court established that arbitrators have the power to create benefits and rights for workers and their families, as long as they are not contrary to labor law and social security law., case_type: labor
+2025-04-28 17:30:28,521 - database.db_utils - INFO - Retrieved from database - file_id: 96650, file_url: https://res.cloudinary.com/duqlsudvy/raw/upload/v1745839517/FICHA%2520STC7617-2021.docx, file_summary: Here is a concise summary:
+
+The Constitutional Court dismissed an action against a judicial decision, ruling that the petitioner failed to demonstrate justification for the delay and did not exercise available means to impugn the competence of the court. The court also found that the petitioner's failure to use available means of defense was a consequence of their own negligence. The court confirmed the petitioner's right to seek restitutive action and assistance from the Public Defender's Office., case_type: constitutional
+2025-04-28 17:30:30,854 - database.db_utils - WARNING - No data found for file_id 89907, returning default values
+2025-04-28 17:30:33,158 - database.db_utils - INFO - Retrieved from database - file_id: 89611, file_url: https://res.cloudinary.com/duqlsudvy/raw/upload/v1745826008/AC016-2022-2021-04722-00.pdf, file_summary: Here is a concise summary:
+
+The Supreme Court of Colombia ruled that the 48th Civil Circuit Court of the Republic has jurisdiction over a lawsuit filed by the National Infrastructure Agency (ANI) against the heirs of Joaquín Alfredo Guerra Tulena, regarding the expropriation of a property for the construction of an oil pipeline. The court held that, as a public entity, ANI has special guarantees that cannot be waived, and the case should be heard by the court with jurisdiction over public entities., case_type: civil
+2025-04-28 17:30:35,366 - database.db_utils - INFO - Retrieved from database - file_id: 95032, file_url: https://res.cloudinary.com/duqlsudvy/raw/upload/v1745839580/FICHA%2520STC8109-2021.docx, file_summary: Here is a concise summary:
+
+The Colombian Constitutional Court ruled that the Second Civil Court of Girardot Circuit violated a plaintiff's constitutional rights by not providing access to her digital case file. The court ordered the court to send the digital link and implement a plan to digitize all court files in the circuit, emphasizing the importance of technology in ensuring access to justice and adapting to the digital landscape., case_type: constitutional
+2025-04-28 17:30:37,746 - database.db_utils - INFO - Retrieved from database - file_id: 73192, file_url: https://res.cloudinary.com/duqlsudvy/raw/upload/v1745839678/FICHA%2520STC8153-2021.docx, file_summary: Here is a concise summary:
+
+A plaintiff filed an appeal against a court decision rejecting their demand for ownership of a property. The Constitutional Court ruled that the decision was not arbitrary and not contrary to law. The court found that the property was subject to a process of extinction of dominion and that the decision was based on a valid legal criterion. The court also held that the measures taken by the authorities were constitutional and lawful. The appeal was dismissed, and the court's decision was upheld., case_type: constitutional
+2025-04-28 17:30:39,053 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"

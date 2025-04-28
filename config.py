@@ -1,5 +1,5 @@
 """
-Configuration module for the Legal AI application.
+Configuration module for the Legal AI application (FastAPI Version).
 
 This module handles loading environment variables and provides configuration
 settings for the application components.
@@ -45,8 +45,9 @@ HEADERS = {
     "api-key": VECTOR_CONFIG["api_key"]
 }
 
-# Flask configuration
-FLASK_CONFIG = {
-    "debug": True,
-    "port": 5000
+# FastAPI configuration
+FASTAPI_CONFIG = {
+    "host": "0.0.0.0",
+    "port": int(os.getenv("PORT", 5000)),
+    "reload": os.getenv("ENVIRONMENT", "development") == "development"
 }

@@ -1,14 +1,15 @@
 """
-LLM service for the Legal AI application.
+LLM service for the Legal AI application (FastAPI Version).
 
 This module handles interactions with language models for query routing,
 question answering, and other NLP tasks.
 """
 
 import logging
+import asyncio
 from typing import Dict, Any, List, Optional, Literal
 
-from groq import Groq
+from groq import Groq, AsyncGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.pydantic_v1 import BaseModel, Field
 from langchain_groq import ChatGroq
@@ -43,7 +44,9 @@ class LLMService:
             model_name: Name of the model to use
         """
         try:
+            # Initialize both sync and async clients
             self.groq_client = Groq(api_key=groq_api_key)
+            self.async_groq_client = AsyncGroq(api_key=groq_api_key)
             self.model_name = model_name
             
             # Initialize LangChain components
@@ -104,6 +107,27 @@ class LLMService:
             logger.error(f"Error routing query: {e}")
             raise LLMServiceError(f"Failed to route query: {e}")
     
+    async def route_query_async(self, query: str) -> str:
+        """
+        Asynchronously route a user query to the appropriate data source.
+        
+        Args:
+            query: User query text
+            
+        Returns:
+            Data source to use ("general" or "casebased")
+            
+        Raises:
+            LLMServiceError: If query routing fails
+        """
+        # For now, we'll just run the sync version in a thread 
+        # to avoid blocking the event loop
+        try:
+            return await asyncio.to_thread(self.route_query, query)
+        except Exception as e:
+            logger.error(f"Error in async route query: {e}")
+            raise LLMServiceError(f"Failed to route query asynchronously: {e}")
+    
     def general_response(self, query: str) -> str:
         """
         Generate a response for a general query.
@@ -134,6 +158,37 @@ class LLMService:
         except Exception as e:
             logger.error(f"Error generating general response: {e}")
             raise LLMServiceError(f"Failed to generate general response: {e}")
+    
+    async def general_response_async(self, query: str) -> str:
+        """
+        Asynchronously generate a response for a general query.
+        
+        Args:
+            query: User query text
+            
+        Returns:
+            Generated response text
+            
+        Raises:
+            LLMServiceError: If response generation fails
+        """
+        try:
+            chat_completion = await self.async_groq_client.chat.completions.create(
+                messages=[
+                    {
+                        "role": "user",
+                        "content": f"""Esta es la pregunta: {query}. Actúa como si fueras un chatbot legal para asistir, así que responde en consecuencia.
+                        
+                    Tu respuesta debe ser completa pero concisa.""",
+                    }
+                ],
+                model=self.model_name,
+            )
+            
+            return chat_completion.choices[0].message.content
+        except Exception as e:
+            logger.error(f"Error generating async general response: {e}")
+            raise LLMServiceError(f"Failed to generate general response asynchronously: {e}")
     
     def case_based_response(self, query: str, context: str) -> str:
         """
@@ -176,3 +231,45 @@ class LLMService:
         except Exception as e:
             logger.error(f"Error generating case-based response: {e}")
             raise LLMServiceError(f"Failed to generate case-based response: {e}")
+    
+    async def case_based_response_async(self, query: str, context: str) -> str:
+        """
+        Asynchronously generate a response for a case-based query using the provided context.
+        
+        Args:
+            query: User query text
+            context: Context information from vector search
+            
+        Returns:
+            Generated response text
+            
+        Raises:
+            LLMServiceError: If response generation fails
+        """
+        try:
+            chat_completion = await self.async_groq_client.chat.completions.create(
+                messages=[
+                    {
+                        "role": "user",
+                        "content": f"""Esta es la pregunta: {query} y este es el contexto: {context}.
+                            
+            Proporciona una respuesta legal completa basada en el contexto proporcionado. Actúa como un asistente legal profesional para abogados. Tu respuesta debe:
+
+            1. Incluir una respuesta clara y específica a la pregunta basada únicamente en el contexto dado  
+            2. Formatear los puntos clave con espaciado y estructura adecuados  
+            3. Usar **negrita** para principios legales importantes, referencias a casos o advertencias críticas  
+            4. Usar saltos de párrafo con \\n\\n entre secciones distintas  
+            5. Incluir viñetas donde sea apropiado para listar requisitos, factores o consideraciones  
+            6. Si se citan regulaciones o estatutos específicos, formatearlos correctamente  
+            7. Evitar jerga innecesaria y mantener la respuesta directa
+
+            Tu respuesta debe ser completa pero concisa, enfocándose en la información legalmente relevante.""",
+                    }
+                ],
+                model=self.model_name,
+            )
+            
+            return chat_completion.choices[0].message.content
+        except Exception as e:
+            logger.error(f"Error generating async case-based response: {e}")
+            raise LLMServiceError(f"Failed to generate case-based response asynchronously: {e}")

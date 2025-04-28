@@ -1,5 +1,5 @@
 """
-API routes for the Legal AI application.
+API routes for the Legal AI application (FastAPI Version).
 
 This module defines the API routes for document upload and retrieval.
 """
@@ -9,9 +9,11 @@ import random
 import json
 import logging
 import io
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Union
 
-from flask import Flask, request, jsonify, Response
+from fastapi import FastAPI, File, UploadFile, Form, Body, Depends, HTTPException, Query
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, Field
 
 from config import (
     DB_CONFIG, 
@@ -44,23 +46,79 @@ from database.db_utils import (
     get_unique_session_ids
 )
 
-from api.responses import (
-    success_response,
-    error_response,
-    bad_request_response
-)
+
+# Define Pydantic models for request/response data
+
+class SuccessResponse(BaseModel):
+    success: bool = True
+    message: Optional[str] = None
+    data: Optional[Any] = None
+
+
+class ErrorResponse(BaseModel):
+    success: bool = False
+    error: Dict[str, Any]
+
+
+class SearchQuery(BaseModel):
+    question: str
+    categories: Optional[List[str]] = None
+    auth_id: Optional[str] = None
+
+
+class MetadataItem(BaseModel):
+    file_id: int
+    id: Optional[int] = None
+    file_url: Optional[str] = None
+    file_summary: Optional[str] = None
+    case_type: Optional[str] = None
+    score: Optional[float] = None
+    text: Optional[str] = None
+    date: Optional[str] = None
+
+
+class SearchResponse(BaseModel):
+    answer: str
+    metadata: List[MetadataItem] = []
+
+
+class UserRequest(BaseModel):
+    auth_id: str
+
+
+class UpdateUserRequest(BaseModel):
+    auth_id: str
+    chat_history: Optional[str] = None
+    is_premium: Optional[bool] = None
+
+
+class ContextRequest(BaseModel):
+    auth_id: str
+    context: Union[str, List[int]]
+
+
+class ChatMessageRequest(BaseModel):
+    auth_id: str
+    session_id: Optional[str] = ""
+    sender: str
+    message: str
+
+
+class SessionRequest(BaseModel):
+    auth_id: str
+    session_id: Optional[str] = None
 
 
 # Configure logging
 logger = logging.getLogger(__name__)
 
 
-def register_routes(app: Flask) -> None:
+def register_routes(app: FastAPI) -> None:
     """
-    Register API routes with the Flask application.
+    Register API routes with the FastAPI application.
     
     Args:
-        app: Flask application instance
+        app: FastAPI application instance
     """
     # Initialize services
     vector_service = VectorService(
@@ -90,8 +148,12 @@ def register_routes(app: Flask) -> None:
     init_database(DB_CONFIG["url"])
     
     # Document upload route
-    @app.route("/upload", methods=["POST"])
-    def upload_file() -> Response:
+    @app.post("/upload", response_model=SuccessResponse)
+    async def upload_file(
+        file: UploadFile = File(...),
+        caseType: str = Form("unknown"),
+        date: str = Form("unknown")
+    ):
         """
         Handle document upload and processing.
         
@@ -99,25 +161,15 @@ def register_routes(app: Flask) -> None:
             JSON response with upload result
         """
         try:
-            # Check if file was provided
-            if 'file' not in request.files:
-                return bad_request_response("No file part")
-            
-            file = request.files['file']
-            if file.filename == '':
-                return bad_request_response("No selected file")
-            
-            # Get case type from request
-            case_type = request.form.get("caseType", "unknown")
-            date = request.form.get("date", "unknown")
-            logger.info(f"Received case type: {case_type}")
-            
             # Validate file type
             if not validate_file_type(file.filename, [".pdf", ".docx"]):
-                return bad_request_response("Unsupported file type. Only PDF and DOCX are allowed.")
+                raise HTTPException(
+                    status_code=400,
+                    detail="Unsupported file type. Only PDF and DOCX are allowed."
+                )
             
             # Get file stream instead of saving to disk
-            file_stream, original_filename = get_file_stream(file)
+            file_stream, original_filename = await get_file_stream(file)
             
             # Process document directly from stream
             chunks = process_document_from_stream(
@@ -131,7 +183,7 @@ def register_routes(app: Flask) -> None:
             file_id = random.randint(10000, 99999)
             
             # Store document vectors
-            vector_service.store_document_vectors(chunks, file_id,case_type,date)
+            vector_service.store_document_vectors(chunks, file_id, caseType, date)
             logger.info(f"Stored vectors for file_id {file_id}")
             
             # Reset stream position for summarization
@@ -160,25 +212,25 @@ def register_routes(app: Flask) -> None:
                 file_id=file_id,
                 file_url=file_url,
                 file_summary=summary,
-                case_type=case_type
+                case_type=caseType
             )
             logger.info(f"Added entry to database with file_id: {file_id}")
             
             # Close the file stream
             file_stream.close()
             
-            return success_response(
-                message=f"File processed and uploaded as {case_type} case",
+            return SuccessResponse(
+                message=f"File processed and uploaded as {caseType} case",
                 data={"file_id": file_id}
             )
             
         except Exception as e:
             logger.error(f"Error in upload_file: {e}")
-            return error_response(f"Failed to process file: {str(e)}", 500)
+            raise HTTPException(status_code=500, detail=f"Failed to process file: {str(e)}")
     
     # Query retrieval route
-    @app.route("/retrieve", methods=["POST"])
-    def search_query() -> Response:
+    @app.post("/retrieve", response_model=SuccessResponse)
+    async def search_query(query: SearchQuery):
         """
         Handle search queries and generate responses.
         
@@ -186,17 +238,12 @@ def register_routes(app: Flask) -> None:
             JSON response with search results and answer
         """
         try:
-            # Get query from request
-            data = request.get_json()
-            question = data.get("question", "")
-            # Get categories from request, defaults to None which will search all categories
-            categories = data.get("categories", None)
-            auth_id = data.get("auth_id", None)
-            print(f"Auth ID: {auth_id}")
-            print(f"Request data: {data}")
+            question = query.question
+            categories = query.categories
+            auth_id = query.auth_id
             
             if not question:
-                return bad_request_response("No question provided")
+                raise HTTPException(status_code=400, detail="No question provided")
                 
             logger.info(f"Received question: {question}")
             logger.info(f"Categories filter: {categories}")
@@ -208,15 +255,15 @@ def register_routes(app: Flask) -> None:
             # Handle general queries
             if query_type == "general":
                 answer = llm_service.general_response(question)
-                return success_response({
-                    "answer": answer,
-                    "metadata": []
-                })
+                return SuccessResponse(data=SearchResponse(
+                    answer=answer,
+                    metadata=[]
+                ))
             
             # Handle case-based queries
             else:
                 # Generate query vector and search
-                search_results = vector_service.search(question,auth_id, case_types=categories, limit=6)
+                search_results = vector_service.search(question, auth_id, case_types=categories, limit=6)
                 
                 # Build context from search results
                 context = ""
@@ -246,17 +293,16 @@ def register_routes(app: Flask) -> None:
                             logger.error(f"Error parsing file metadata: {e}")
                             data = {}
                         
-                        file_metadata[file_id] = {
-                            "file_id": file_id,
-                            "id":id,
-                            "score": score,
-                            "text": text,
-                            "file_url": data.get("file_url"),
-                            "file_summary": data.get("file_summary"),
-                            "case_type": data.get("case_type"),
-                            "date": date,
-                            
-                        }
+                        file_metadata[file_id] = MetadataItem(
+                            file_id=file_id,
+                            id=id,
+                            score=score,
+                            text=text,
+                            file_url=data.get("file_url"),
+                            file_summary=data.get("file_summary"),
+                            case_type=data.get("case_type"),
+                            date=date,
+                        )
                     
                     # Only add to metadata_list if this file_id hasn't been added yet
                     if file_id not in added_file_ids:
@@ -271,20 +317,18 @@ def register_routes(app: Flask) -> None:
                     # Generate response based on search results
                     answer = llm_service.case_based_response(question, context)
                 
-                return success_response({
-                    "answer": answer,
-                    "metadata": metadata_list
-                })
+                return SuccessResponse(data=SearchResponse(
+                    answer=answer,
+                    metadata=metadata_list
+                ))
                 
         except Exception as e:
             logger.error(f"Error in search_query: {e}")
-            return error_response(f"Failed to process query: {str(e)}", 500)
-        
-
+            raise HTTPException(status_code=500, detail=f"Failed to process query: {str(e)}")
     
-    #add user if not exist
-    @app.route("/add_user", methods=["POST"])
-    def add_user() -> Response:
+    # Add user if not exist
+    @app.post("/add_user", response_model=SuccessResponse)
+    async def add_user(user: UserRequest):
         """
         Handle user addition.
         
@@ -292,12 +336,10 @@ def register_routes(app: Flask) -> None:
             JSON response with user addition result
         """
         try:
-            # Get user data from request
-            data = request.get_json()
-            auth_id = data.get("auth_id", "")
+            auth_id = user.auth_id
             
             if not auth_id:
-                return bad_request_response("auth_id required")
+                raise HTTPException(status_code=400, detail="auth_id required")
             
             # Add user to database
             create_default_user(
@@ -305,16 +347,15 @@ def register_routes(app: Flask) -> None:
                 auth_id=auth_id
             )
             
-            return success_response(message="User added successfully")
+            return SuccessResponse(message="User added successfully")
             
         except Exception as e:
             logger.error(f"Error in add_user: {e}")
-            return error_response(f"Failed to add user: {str(e)}", 500)
+            raise HTTPException(status_code=500, detail=f"Failed to add user: {str(e)}")
 
-    
-
-    @app.route("/update_user_fields", methods=["POST"])
-    def update_user() -> Response:
+    # Update user fields
+    @app.post("/update_user_fields", response_model=SuccessResponse)
+    async def update_user(user_data: UpdateUserRequest):
         """
         Handle user field updates.
         
@@ -322,49 +363,30 @@ def register_routes(app: Flask) -> None:
             JSON response with user update result
         """
         try:
-            # Get user data from request
-            data = request.get_json()
-            auth_id = data.get("auth_id", "")
-            is_history = data.get("chat_history", None)
-            is_premium = data.get("is_premium", None)
+            auth_id = user_data.auth_id
+            is_history = user_data.chat_history
+            is_premium = user_data.is_premium
             
-            if is_history==None and is_premium==None:
-                return bad_request_response("history or isPremium required")
+            if is_history is None and is_premium is None:
+                raise HTTPException(status_code=400, detail="history or isPremium required")
             
             # Update user fields in database
-            if is_history!=None and is_premium!=None:
-                update_user_fields(
+            update_user_fields(
                 db_url=DB_CONFIG["url"],
                 auth_id=auth_id,
                 chat_history=is_history,
                 is_premium=is_premium
             )
             
-            if is_history!=None and is_premium==None:
-                update_user_fields(
-                db_url=DB_CONFIG["url"],
-                auth_id=auth_id,
-                chat_history=is_history
-            )
-                
-            if is_history==None and is_premium!=None:
-                update_user_fields(
-                db_url=DB_CONFIG["url"],
-                auth_id=auth_id,
-                is_premium=is_premium
-            )
-            
-            
-            
-            return success_response(message="User fields updated successfully")
+            return SuccessResponse(message="User fields updated successfully")
             
         except Exception as e:
             logger.error(f"Error in update_user_fields: {e}")
-            return error_response(f"Failed to update user fields: {str(e)}", 500)
-        
-
-    @app.route("/get_user", methods=["POST"])
-    def get_user_info() -> Response:
+            raise HTTPException(status_code=500, detail=f"Failed to update user fields: {str(e)}")
+    
+    # Get user information
+    @app.post("/get_user", response_model=SuccessResponse)
+    async def get_user_info(user: UserRequest):
         """
         Handle user information retrieval.
         
@@ -372,12 +394,10 @@ def register_routes(app: Flask) -> None:
             JSON response with user information
         """
         try:
-            # Get user data from request
-            data = request.get_json()
-            auth_id = data.get("auth_id", "")
+            auth_id = user.auth_id
             
             if not auth_id:
-                return bad_request_response("auth_id required")
+                raise HTTPException(status_code=400, detail="auth_id required")
             
             # Retrieve user information from database
             user_info = get_user(
@@ -385,15 +405,15 @@ def register_routes(app: Flask) -> None:
                 auth_id=auth_id
             )
             
-            return success_response(data=user_info)
+            return SuccessResponse(data=user_info)
             
         except Exception as e:
             logger.error(f"Error in get_user: {e}")
-            return error_response(f"Failed to retrieve user: {str(e)}", 500)
-        
-
-    @app.route("/append_context_history", methods=["POST"])
-    def append_context() -> Response:
+            raise HTTPException(status_code=500, detail=f"Failed to retrieve user: {str(e)}")
+    
+    # Append context history
+    @app.post("/append_context_history", response_model=SuccessResponse)
+    async def append_context(context_data: ContextRequest):
         """
         Handle context history appending.
         
@@ -401,13 +421,11 @@ def register_routes(app: Flask) -> None:
             JSON response with context history append result
         """
         try:
-            # Get user data from request
-            data = request.get_json()
-            auth_id = data.get("auth_id", "")
-            context = data.get("context", "")
+            auth_id = context_data.auth_id
+            context = context_data.context
             
             if not auth_id or not context:
-                return bad_request_response("auth_id and context required")
+                raise HTTPException(status_code=400, detail="auth_id and context required")
             
             # Append context history in database
             append_to_context_history_queue(
@@ -416,15 +434,15 @@ def register_routes(app: Flask) -> None:
                 new_values=context
             )
             
-            return success_response(message="Context appended successfully")
+            return SuccessResponse(message="Context appended successfully")
             
         except Exception as e:
             logger.error(f"Error in append_context_history: {e}")
-            return error_response(f"Failed to append context: {str(e)}", 500)
+            raise HTTPException(status_code=500, detail=f"Failed to append context: {str(e)}")
     
-    
-    @app.route("/add_chat_message", methods=["POST"])
-    def add_chat_message_route() -> Response:
+    # Add chat message
+    @app.post("/add_chat_message", response_model=SuccessResponse)
+    async def add_chat_message_route(message_data: ChatMessageRequest):
         """
         Handle chat message addition.
         
@@ -432,15 +450,13 @@ def register_routes(app: Flask) -> None:
             JSON response with chat message addition result
         """
         try:
-            # Get user data from request
-            data = request.get_json()
-            auth_id = data.get("auth_id", "")
-            session_id = data.get("session_id", "")
-            sender = data.get("sender", "")
-            message = data.get("message", "")
+            auth_id = message_data.auth_id
+            session_id = message_data.session_id
+            sender = message_data.sender
+            message = message_data.message
             
             if not auth_id or not message:
-                return bad_request_response("auth_id and message required")
+                raise HTTPException(status_code=400, detail="auth_id and message required")
             
             # Add chat message in database
             add_chat_message(
@@ -451,15 +467,15 @@ def register_routes(app: Flask) -> None:
                 message=message
             )
             
-            return success_response(message="Chat message added successfully")
+            return SuccessResponse(message="Chat message added successfully")
             
         except Exception as e:
             logger.error(f"Error in add_chat_message: {e}")
-            return error_response(f"Failed to add chat message: {str(e)}", 500)
-        
-
-    @app.route("/get_chat_history", methods=["POST"])
-    def get_chat_history_route() -> Response:
+            raise HTTPException(status_code=500, detail=f"Failed to add chat message: {str(e)}")
+    
+    # Get chat history
+    @app.post("/get_chat_history", response_model=SuccessResponse)
+    async def get_chat_history_route(session_data: SessionRequest):
         """
         Handle chat history retrieval.
         
@@ -467,13 +483,11 @@ def register_routes(app: Flask) -> None:
             JSON response with chat history
         """
         try:
-            # Get user data from request
-            data = request.get_json()
-            auth_id = data.get("auth_id", "")
-            session_id = data.get("session_id", "")
+            auth_id = session_data.auth_id
+            session_id = session_data.session_id
             
             if not auth_id:
-                return bad_request_response("auth_id required")
+                raise HTTPException(status_code=400, detail="auth_id required")
             
             # Retrieve chat history from database
             chat_history = get_chat_history(
@@ -482,14 +496,15 @@ def register_routes(app: Flask) -> None:
                 session_id=session_id
             )
             
-            return success_response(data=chat_history)
+            return SuccessResponse(data=chat_history)
             
         except Exception as e:
             logger.error(f"Error in get_chat_history: {e}")
-            return error_response(f"Failed to retrieve chat history: {str(e)}", 500)
-        
-    @app.route("/get_unique_session_ids", methods=["POST"])
-    def get_unique_session_ids_route() -> Response:
+            raise HTTPException(status_code=500, detail=f"Failed to retrieve chat history: {str(e)}")
+    
+    # Get unique session IDs
+    @app.post("/get_unique_session_ids", response_model=SuccessResponse)
+    async def get_unique_session_ids_route(user: UserRequest):
         """
         Handle unique session ID retrieval.
         
@@ -497,12 +512,10 @@ def register_routes(app: Flask) -> None:
             JSON response with unique session IDs
         """
         try:
-            # Get user data from request
-            data = request.get_json()
-            auth_id = data.get("auth_id", "")
+            auth_id = user.auth_id
             
             if not auth_id:
-                return bad_request_response("auth_id required")
+                raise HTTPException(status_code=400, detail="auth_id required")
             
             # Retrieve unique session IDs from database
             session_ids = get_unique_session_ids(
@@ -510,8 +523,8 @@ def register_routes(app: Flask) -> None:
                 auth_id=auth_id
             )
             
-            return success_response(data=session_ids)
+            return SuccessResponse(data=session_ids)
             
         except Exception as e:
             logger.error(f"Error in get_unique_session_ids: {e}")
-            return error_response(f"Failed to retrieve unique session IDs: {str(e)}", 500)
+            raise HTTPException(status_code=500, detail=f"Failed to retrieve unique session IDs: {str(e)}")

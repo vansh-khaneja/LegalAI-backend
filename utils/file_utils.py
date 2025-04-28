@@ -1,5 +1,5 @@
 """
-File utility functions for the Legal AI application.
+File utility functions for the Legal AI application (FastAPI Version).
 
 This module provides utility functions for file handling operations.
 """
@@ -8,7 +8,7 @@ import os
 import logging
 import io
 from typing import Tuple, List, Optional, BinaryIO, Union
-from werkzeug.datastructures import FileStorage
+from fastapi import UploadFile
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -32,7 +32,7 @@ def get_file_extension(filename: str) -> str:
     return os.path.splitext(filename)[1].lower()
 
 
-def get_file_stream(file: FileStorage) -> Tuple[BinaryIO, str]:
+async def get_file_stream(file: UploadFile) -> Tuple[BinaryIO, str]:
     """
     Get a file stream from an uploaded file without saving it locally.
     
@@ -46,8 +46,8 @@ def get_file_stream(file: FileStorage) -> Tuple[BinaryIO, str]:
         FileUtilsError: If file processing fails
     """
     try:
-        # Read the file data into memory
-        file_data = file.read()
+        # Read the file data into memory asynchronously
+        file_data = await file.read()
         
         # Create a BytesIO object from the file data
         file_stream = io.BytesIO(file_data)

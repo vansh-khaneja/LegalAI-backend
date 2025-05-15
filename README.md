@@ -2,6 +2,11 @@
 
 This repository contains the backend API for the Legal AI application, a powerful tool designed to process, analyze, and retrieve information from legal documents.
 
+## 🌐 Frontend URL
+
+GitHub Repo: [https://github.com/vansh-khaneja/chat-front](https://github.com/vansh-khaneja/chat-front)
+
+
 ## 📋 Table of Contents
 
 - [Project Structure](#project-structure)
